@@ -30,12 +30,13 @@ enum class Card_Value_t
 };
 
 
+
 class Card
 {
     public:
         using card_t = std::pair< Card_Color_t, Card_Value_t>;
-
-        Card(Card_Color_t color, Card_Value_t value) : card_(color, value) {}
+    
+        Card(Card_Color_t color = Card_Color_t::clover, Card_Value_t value = Card_Value_t::ace) : card_(color, value) {}
 
         Card(const Card&) = default;
 
@@ -48,6 +49,24 @@ class Card
         card_t card_;
 };
 
+class DeckOfCards
+{
+    public:
+    using card_t = std::pair< Card_Color_t, Card_Value_t>;
 
+    DeckOfCards(std::size_t n = 52) : deck_(52) {} 
+
+    DeckOfCards(const DeckOfCards&) = default;
+
+    Card getTopCard();
+    void shuffleDeck();
+
+
+    ~DeckOfCards() = default;
+
+    private:
+        std::vector<card_t> deck_;
+
+};
 
 #endif //GAME_CLASSES_H_
