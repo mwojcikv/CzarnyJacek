@@ -1,1 +1,9 @@
+by stworzyć reprezentację graficzną kart w grze blackjack,
+należy wybrać odpowiednie biblioteki do interfejsu użytkownika,
+zapewnić zestaw grafik kart, reprezentować karty w kodzie poprzez dane jak wartość (2-10, As, Król, itd.)
+i symbol (serce, trefl, itd.), zaimplementować interakcje użytkownika, integrując je z mechaniką gry.
+Następnie należy przeprowadzić testy, wprowadzić ewentualne poprawki, zapewniając czytelność, intuicyjność i estetykę interfejsu użytkownika.
+
+
+
 
