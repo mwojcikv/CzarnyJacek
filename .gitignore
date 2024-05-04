@@ -2,3 +2,5 @@ build/
 bin/
 .vscode/
 googletest-master/
+cmake-build-*/
+.idea
