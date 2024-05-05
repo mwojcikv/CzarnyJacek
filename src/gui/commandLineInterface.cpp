@@ -13,19 +13,41 @@ void interface() {
     std::cout << "6. Wyjscie\n\n";
     std::cout << "Wybierz opcje: ";
     std::cin >> opcja;
+    //system("cls");
 
     switch (opcja) {
         case 1:
             std::cout << "\n===== Rozgrywka z botami =====\n\n";
             std::cout << "*gui_dla_botow*\n";
+            std::cout << "1. Rozpocznij gre\n";
+            std::cout << "2. Wybierz poziom trudnosci\n";
+            std::cout << "3. Wroc do menu\n\n";
+            int opcja1;
+            std::cout << "Wybierz opcje: ";
+            std::cin >> opcja1;
+            //system("cls");
             break;
         case 2:
             std::cout << "\n===== Rozgrywka multiplayer =====\n\n";
             std::cout << "*gui_dla_multiplayera*\n";
+            std::cout << "1. Rozpocznij gre\n";
+            std::cout << "2. Twoja ranga\n";
+            std::cout << "3. Wroc do menu\n\n";
+            int opcja2;
+            std::cout << "Wybierz opcje: ";
+            std::cin >> opcja2;
+            //system("cls");
             break;
         case 3:
             std::cout << "\n===== Sklep =====\n\n";
             std::cout << "*gui_dla_sklepu*\n";
+            std::cout << "1. Sklep z kartami\n";
+            std::cout << "2. Sklep z ulepszeniami\n";
+            std::cout << "3. Wroc do menu\n\n";
+            int opcja3;
+            std::cout << "Wybierz opcje: ";
+            std::cin >> opcja3;
+            //system("cls");
             break;
         case 4:
             std::cout << "\n===== Ekskluzywna zawartosc dla uzytkownikow =====\n\n";
