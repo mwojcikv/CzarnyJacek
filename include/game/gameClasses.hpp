@@ -3,6 +3,9 @@
 
 #include <string>
 #include <utility>
+#include <vector>
+#include <algorithm>
+#include <random>
 
 enum class Card_Color_t
 {
@@ -54,10 +57,15 @@ class DeckOfCards
     public:
     using card_t = std::pair< Card_Color_t, Card_Value_t>;
 
-    DeckOfCards(std::size_t n = 52) : deck_(52) {} 
+    DeckOfCards(std::size_t n = 52) : deck_(n, Card()) {} 
 
     DeckOfCards(const DeckOfCards&) = default;
 
+    const Card& operator[](std::size_t n) const {return deck_[n];} 
+    Card& operator[](std::size_t n)  {return deck_[n];}
+    
+
+    std::size_t numOfCards() const {return deck_.size();}
     Card getTopCard();
     void shuffleDeck();
 
@@ -65,7 +73,7 @@ class DeckOfCards
     ~DeckOfCards() = default;
 
     private:
-        std::vector<card_t> deck_;
+        std::vector<Card> deck_;
 
 };
 

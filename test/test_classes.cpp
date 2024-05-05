@@ -19,3 +19,11 @@ TEST(CardTest, copy_constructor)
     EXPECT_EQ(Card_Value_t::ten, card2.getCardValue());
     EXPECT_EQ(card1.getCard(), card2.getCard());    
 }
+
+TEST(DeckOfCardsTest, constructor)
+{
+    DeckOfCards basic;
+
+    EXPECT_EQ(basic.numOfCards(), 52);
+}
+
