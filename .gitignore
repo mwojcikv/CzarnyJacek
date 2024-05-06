@@ -2,3 +2,9 @@ build/
 bin/
 .vscode/
 googletest-master/
+
+
+#Clion
+cmake-build-*/
+.idea
+googletest*/
