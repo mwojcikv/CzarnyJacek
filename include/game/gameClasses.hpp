@@ -6,6 +6,8 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <array>
+#include <memory>
 
 enum class Card_Color_t
 {
@@ -32,7 +34,9 @@ enum class Card_Value_t
     king
 };
 
-
+const std::array<Card_Color_t, 4> all_colors = {Card_Color_t::clover, Card_Color_t::pikes, Card_Color_t::hearts, Card_Color_t::diamonds};
+const std::array<Card_Value_t, 13> all_values = {Card_Value_t::ace, Card_Value_t::two, Card_Value_t::three, Card_Value_t::four, Card_Value_t::five, Card_Value_t::six, 
+                                                Card_Value_t::seven, Card_Value_t::eight, Card_Value_t::nine, Card_Value_t::ten, Card_Value_t::jack, Card_Value_t::queen, Card_Value_t::king};
 
 class Card
 {
@@ -57,23 +61,23 @@ class DeckOfCards
     public:
     using card_t = std::pair< Card_Color_t, Card_Value_t>;
 
-    DeckOfCards(std::size_t n = 52) : deck_(n, Card()) {} 
+    DeckOfCards();
 
     DeckOfCards(const DeckOfCards&) = default;
 
-    const Card& operator[](std::size_t n) const {return deck_[n];} 
-    Card& operator[](std::size_t n)  {return deck_[n];}
+    const Card* operator[](std::size_t n) const {return deck_[n].get();} 
+    Card* operator[](std::size_t n)  {return deck_[n].get();}
     
 
     std::size_t numOfCards() const {return deck_.size();}
-    Card getTopCard();
+    const Card* getTopCard();
     void shuffleDeck();
 
 
     ~DeckOfCards() = default;
 
     private:
-        std::vector<Card> deck_;
+        std::vector<std::unique_ptr<Card>> deck_;
 
 };
 

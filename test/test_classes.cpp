@@ -23,7 +23,10 @@ TEST(CardTest, copy_constructor)
 TEST(DeckOfCardsTest, constructor)
 {
     DeckOfCards basic;
-
+    Card card(Card_Color_t::clover, Card_Value_t::ace);
     EXPECT_EQ(basic.numOfCards(), 52);
+    EXPECT_EQ((*basic[0]).getCardColor(), card.getCardColor());
+    EXPECT_EQ((*basic[0]).getCardValue(), card.getCardValue());
+
 }
 

@@ -1,8 +1,8 @@
 #include "game/gameClasses.hpp"
 
-Card DeckOfCards::getTopCard()
+const Card* DeckOfCards::getTopCard()
 {
-    Card lastCard = deck_.back();
+    const Card* lastCard = (deck_.back()).get();
     deck_.pop_back();
     return lastCard;
 }
@@ -10,4 +10,15 @@ Card DeckOfCards::getTopCard()
 void DeckOfCards::shuffleDeck(){
     std::random_device rd;
     std::shuffle(deck_.begin(), deck_.end(), rd);
+}
+
+DeckOfCards::DeckOfCards()
+{
+    for(const auto& c : all_colors)
+    {
+        for(const auto& v : all_values)
+        {
+            deck_.push_back(std::make_unique<Card>(c, v));
+        }
+    }
 }
