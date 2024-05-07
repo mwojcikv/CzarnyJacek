@@ -8,6 +8,7 @@
 #include <random>
 #include <array>
 #include <memory>
+#include<cstdlib>
 
 enum class Card_Color_t
 {
@@ -51,6 +52,8 @@ class Card
         Card_Value_t getCardValue() const { return card_.second; }
         card_t       getCard() const { return card_; }
 
+        int getCardIntValue() const;
+        
         ~Card() = default;
     private:
         card_t card_;
@@ -61,7 +64,7 @@ class DeckOfCards
     public:
     using card_t = std::pair< Card_Color_t, Card_Value_t>;
 
-    DeckOfCards();
+    DeckOfCards(std::size_t numOf52Decks = 1);
 
     DeckOfCards(const DeckOfCards&) = default;
 
@@ -72,6 +75,14 @@ class DeckOfCards
     std::size_t numOfCards() const {return deck_.size();}
     const Card* getTopCard();
     void shuffleDeck();
+
+    std::vector<std::unique_ptr<Card>>::iterator begin() {return deck_.begin();}
+    std::vector<std::unique_ptr<Card>>::const_iterator begin() const {return deck_.cbegin();}
+    std::vector<std::unique_ptr<Card>>::const_iterator cbegin() const {return deck_.cbegin();}
+    
+    std::vector<std::unique_ptr<Card>>::iterator end() {return deck_.end();}
+    std::vector<std::unique_ptr<Card>>::const_iterator end() const {return deck_.cend();}
+    std::vector<std::unique_ptr<Card>>::const_iterator cend() const {return deck_.cend();}
 
 
     ~DeckOfCards() = default;

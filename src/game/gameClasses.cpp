@@ -12,13 +12,17 @@ void DeckOfCards::shuffleDeck(){
     std::shuffle(deck_.begin(), deck_.end(), rd);
 }
 
-DeckOfCards::DeckOfCards()
+DeckOfCards::DeckOfCards(std::size_t numOf52Decks)
 {
-    for(const auto& c : all_colors)
+    for(std::size_t i = 0; i < numOf52Decks ; i++)
     {
-        for(const auto& v : all_values)
+        for(const auto& c : all_colors)
         {
-            deck_.push_back(std::make_unique<Card>(c, v));
+            for(const auto& v : all_values)
+            {
+                deck_.push_back(std::make_unique<Card>(c, v));
+            }
         }
     }
+
 }
