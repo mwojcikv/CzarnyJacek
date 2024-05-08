@@ -9,7 +9,7 @@ public:
     //kontruktory
     Hand(const Hand& ) = default; //kopiujący
 
-    Hand(const std::vector<Card*>& list = {}): hand_(list){};
+    Hand(const std::vector<Card*>& list = {}): hand_(list);
 
     //destruktor
     ~Hand() = default;
@@ -19,10 +19,11 @@ public:
     //metody
     std::string printHand() const;//zwraca reke jako stringa
 
-    std::size_t handValue() const;//zwraca wartosc kart na rece
+    int handValue() const;//zwraca wartosc kart na rece
 
     void add_card(const Card& card);//dodawanie karty do reki
-    void add_card(Card* card_ptr);// dodawawanie karty do reki
+    void add_card(const Card* card_ptr);// dodawawanie karty do reki
+
 
     //przeciązony operator []
     Hand& operator [](std::size_t pos) {return hand_[pos]};//operator przypisania
@@ -40,10 +41,10 @@ private:
     //konterner któy zawiera ręke gracza
     //TODO zastanowic się nad rodzajem relacji miedzy klasami czy na pewno kompozycja
     std::vector<Card*> hand_;
+    inline static int ace_num =0;
+    int value_;
 
 };
-
-
 
 
 
