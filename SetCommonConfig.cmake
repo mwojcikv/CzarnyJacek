@@ -35,7 +35,8 @@ else()
     set(lang_src_extension cpp)
 endif()
 
-add_executable(${EXEC_DEBUG} ${SOURCE_FILES} main.${lang_src_extension})
+add_executable(${EXEC_DEBUG} ${SOURCE_FILES} main.${lang_src_extension}
+        src/gui/commandLineInterface.cpp)
 
 if(EXISTS ${PROJECT_SOURCE_DIR}/test)
     set(EXEC_TEST ${PROJECT_ID}__test)
