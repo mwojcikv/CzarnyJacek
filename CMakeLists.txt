@@ -6,14 +6,15 @@ project(CzarnyJacek)
 include_directories(include)
 
 set(SOURCE_FILES
-        src/gui
-        src/game
+        src/gui/commandLineInterface.cpp
+        src/game/gameClasses.cpp
+        src/game/gameRules.cpp
         )
 
 set(SOURCES_FILES_TESTS
-        test/main_gtest.cpp
         test/test_classes.cpp
         test/test_rules.cpp
         )
 
 include(./SetCommonConfig.cmake)
+

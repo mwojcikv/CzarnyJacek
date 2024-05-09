@@ -4,17 +4,18 @@
 #include <ostream>
 
 
-Hand::Hand(const std::vector<Card*>& list) : hand_(list){
+Hand::Hand(const std::vector<Card*>& list) : hand_(list)
     {
-        for(const auto& card_ptr: list){
-            if(card_ptr->getCardIntValue() == 1){
+        value_ = 0;
+        for(const auto& card_ptr : list)
+        {
+            if(card_ptr->getCardValue() == Card_Value_t::ace)
+            {
                 ace_num += 1;
             }
+            value_ += card_ptr -> getCardIntValue();
         }
-        int result = this->value_;
-        value_ = result;
     }
-};
 
 
 
@@ -118,8 +119,10 @@ int Card::getCardIntValue() const
 }
 
 
-std::string Card_Value_to_string(const Card_Value_t& cardValue ){
-    switch(cardValue) {
+std::string Card_Value_to_string(const Card_Value_t& cardValue )
+{
+    switch(cardValue) 
+    {
         case Card_Value_t::ace:
             return "Ace";
         case Card_Value_t::two:
@@ -161,5 +164,7 @@ std::string Card_Color_to_string(const Card_Color_t& cardColor ){
             return "Diamonds";
         case Card_Color_t::clover:
             return "Clover";
+        default:
+            return "Error";
     }
 }

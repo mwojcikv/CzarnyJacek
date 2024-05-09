@@ -97,11 +97,10 @@ class DeckOfCards
 class Hand{
 public:
     //kontruktory
-    Hand(const Hand& ) = default; //kopiujący
+
     Hand(const std::vector<Card*>& list = {});
 
     //destruktor
-    virtual ~Hand();
 
     Hand& operator = (const Hand& hand) = default;//kopiujący operator przypisania
 
@@ -125,6 +124,8 @@ public:
     std::vector<Card*>::const_iterator cend() const { return hand_.cend(); }
     std::vector<Card*>::const_iterator end() const { return hand_.end(); }
     std::vector<Card*>::iterator end() { return hand_.end(); }
+  
+    virtual ~Hand() = 0;
 
 private:
     //konterner któy zawiera ręke gracza
