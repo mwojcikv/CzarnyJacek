@@ -116,3 +116,25 @@ int Card::getCardIntValue() const
 
 }
 
+void Dealer::dealInitialHand(Hand& playerHand, Hand& dealerHand) {
+    // Rozdaj dwie karty graczowi i jedną krupierowi (pierwsza karta krupiera zakryta)
+    playerHand.add_card(deck_.getTopCard());
+    dealerHand.add_card(deck_.getTopCard());
+    playerHand.add_card(deck_.getTopCard());
+    dealerHand.add_card(deck_.getTopCard());
+}
+
+void Dealer::playTurn(Hand& playerHand, Hand& dealerHand) {
+    // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
+    while (dealerHand.handValue() < 17) {
+        dealerHand.add_card(deck_.getTopCard());
+    }
+}
+
+void Dealer::revealHand() const {
+    // Odsłonięcie kart krupiera
+    std::cout << "Dealer's hand:\n";
+    for (auto card : deck_) {
+        std::cout << "Color: " << static_cast<int>(card->getCardColor()) << ", Value: " << static_cast<int>(card->getCardValue()) << "\n";
+    }
+}

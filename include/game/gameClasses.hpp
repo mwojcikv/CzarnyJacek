@@ -136,52 +136,25 @@ private:
 
 };
 
-class Krupier {
-private:
-    std::vector<Karta> reka; // krupier trzyma na ręcę elementy klasy Karta
-
+class Dealer {
 public:
-    void otrzymajKarte(Karta karta) {
-        reka.push_back(karta);
-    }
+    // Konstruktory
+    Dealer(const Dealer&) = default; // Konstruktor kopiujący
+    Dealer(DeckOfCards& deck) : deck_(deck) {}
 
-    int sumaRęki() {
-        int suma = 0;
-        int asy = 0;
-        for (const Karta& karta : reka) {
-            if (karta.wartość() == "As") {
-                asy++;
-            } else {
-                suma += karta.wartość();
-            }
-        }
+    // Destruktor
+    ~Dealer() = default;
 
-        for (int i = 0; i < asy; i++) {
-            if (suma + 11 <= 21) {
-                suma += 11;
-            } else {
-                suma += 1;
-            }
-        }
+    // Przeciążony operator przypisania
+    Dealer& operator=(const Dealer& dealer) { return *this; }
 
-        return suma;
-    }
+    // Metody
+    void dealInitialHand(Hand& playerHand, Hand& dealerHand); // Rozdanie dwóch początkowych kart graczowi i krupierowi
+    void playTurn(Hand& playerHand, Hand& dealerHand); // Obsługa ruchu krupiera
+    void revealHand() const; // Odsłonięcie kart krupiera
 
-    bool czyPrzegrałeś() {
-        return sumaRęki() > 21;
-    }
-
-    bool czyPokonałeś(int sumaGracza) {
-        return sumaRęki() > sumaGracza || sumaGracza > 21;
-    }
-
-    bool czyRemis(int sumaGracza) {
-        return sumaRęki() == sumaGracza;
-    }
-
-    void wyczyśćRękę() {
-        reka.clear();
-    }
+private:
+    DeckOfCards& deck_; // Referencja do talii kart
 };
 
 
