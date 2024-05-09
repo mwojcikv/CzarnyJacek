@@ -97,11 +97,10 @@ class DeckOfCards
 class Hand{
 public:
     //kontruktory
-    Hand(const Hand& ) = default; //kopiujący
+
     Hand(const std::vector<Card*>& list = {});
 
     //destruktor
-    virtual ~Hand();
 
     Hand& operator = (const Hand& hand) = default;//kopiujący operator przypisania
 
@@ -125,6 +124,8 @@ public:
     std::vector<Card*>::const_iterator cend() const { return hand_.cend(); }
     std::vector<Card*>::const_iterator end() const { return hand_.end(); }
     std::vector<Card*>::iterator end() { return hand_.end(); }
+  
+    virtual ~Hand() = 0;
 
 private:
     //konterner któy zawiera ręke gracza
@@ -134,13 +135,17 @@ private:
 
 };
 
-class Croupier : public Hand
+class Dealer : public Hand
 {
     public:
-        Croupier(const std::vector<Card*>& list = {});
+        Dealer(const std::vector<Card*>& list = {});
 
-        Croupier(const Croupier&) = default;
+        Dealer(const Dealer&) = default;
 
+        
+        void dealInitialHand(Hand& playerHand, Hand& dealerHand); // Rozdanie dwóch początkowych kart graczowi i krupierowi
+        void playTurn(Hand& playerHand, Hand& dealerHand); // Obsługa ruchu krupiera
+        void revealHand() const; // Odsłonięcie kart krupiera
 
         bool isGameLost() { return (handValue() > 21);}
 
@@ -148,7 +153,7 @@ class Croupier : public Hand
 
         bool isDraw(int gamerValue) { return (handValue() == gamerValue);}
 
-        ~Croupier() = default; 
+        ~Dealer() = default; 
 
 };
 
