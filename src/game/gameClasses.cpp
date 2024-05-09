@@ -1,10 +1,10 @@
-#include "game\gameClasses.hpp"
+#include "game/gameClasses.hpp"
 #include <sstream>
 #include <iostream>
 #include <ostream>
 
 
-Hand::Hand(const std::vector<Card*>& list): hand_(list){
+Hand::Hand(const std::vector<Card*>& list) : hand_(list){
     {
         for(const auto& card_ptr: list){
             if(card_ptr->getCardIntValue() == 1){
@@ -15,6 +15,7 @@ Hand::Hand(const std::vector<Card*>& list): hand_(list){
         value_ = result;
     }
 };
+
 
 
 std::string Hand::printHand() const{

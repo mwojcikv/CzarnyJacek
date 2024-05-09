@@ -101,8 +101,8 @@ public:
     Hand(const std::vector<Card*>& list = {});
 
     //destruktor
-    ~Hand() = default;
-    //TODO można go dodać bo nie działa...
+    virtual ~Hand();
+
     Hand& operator = (const Hand& hand) = default;//kopiujący operator przypisania
 
     //metody
@@ -128,59 +128,28 @@ public:
 
 private:
     //konterner któy zawiera ręke gracza
-    //TODO zastanowic się nad rodzajem relacji miedzy klasami czy na pewno kompozycja
     std::vector<Card*> hand_;
     inline static int ace_num =0;
     int value_;
 
 };
 
-class Krupier {
-private:
-    std::vector<Karta> reka; // krupier trzyma na ręcę elementy klasy Karta
+class Croupier : public Hand
+{
+    public:
+        Croupier(const std::vector<Card*>& list = {});
 
-public:
-    void otrzymajKarte(Karta karta) {
-        reka.push_back(karta);
-    }
+        Croupier(const Croupier&) = default;
 
-    int sumaRęki() {
-        int suma = 0;
-        int asy = 0;
-        for (const Karta& karta : reka) {
-            if (karta.wartość() == "As") {
-                asy++;
-            } else {
-                suma += karta.wartość();
-            }
-        }
 
-        for (int i = 0; i < asy; i++) {
-            if (suma + 11 <= 21) {
-                suma += 11;
-            } else {
-                suma += 1;
-            }
-        }
+        bool isGameLost() { return (handValue() > 21);}
 
-        return suma;
-    }
+        bool isGameWon(int gamerValue) { return (21 >= handValue() && handValue()> gamerValue) || (gamerValue > 21 && handValue()<= 21);}
 
-    bool czyPrzegrałeś() {
-        return sumaRęki() > 21;
-    }
+        bool isDraw(int gamerValue) { return (handValue() == gamerValue);}
 
-    bool czyPokonałeś(int sumaGracza) {
-        return sumaRęki() > sumaGracza || sumaGracza > 21;
-    }
+        ~Croupier() = default; 
 
-    bool czyRemis(int sumaGracza) {
-        return sumaRęki() == sumaGracza;
-    }
-
-    void wyczyśćRękę() {
-        reka.clear();
-    }
 };
 
 
