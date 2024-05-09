@@ -1,57 +1,57 @@
 #include "game\gameClasses.hpp"
 #include <sstream>
 #include <iostream>
+#include <ostream>
+
+
+Hand::Hand(const std::vector<Card*>& list): hand_(list){
+    {
+        for(const auto& card_ptr: list){
+            if(card_ptr->getCardIntValue() == 1){
+                ace_num += 1;
+            }
+        }
+        int result = this->value_;
+        value_ = result;
+    }
+};
+
 
 std::string Hand::printHand() const{
     std::ostringstream oss;
     for(const auto& card_ptr: hand_){
-        oss<< card_ptr->getCardValue() << " "<< card_ptr->getCardColor<< "\n";
+        oss<< Card_Value_to_string( card_ptr->getCardValue())<< " of "<< Card_Color_to_string(card_ptr->getCardColor())<< "\n";
     }
     return oss.str();
 }
 
-Hand::Hand(const std::vector<Card*>& list = {}){
-    for(const auto& card_ptr: list){
-        if(card_ptr->getCardIntValue == 1){
-            ace_num += 1;
-        }
-    }
-    int wynik = this->value_;
-    value_ = wynik;
-
-}
-
 int Hand::handValue() const{
-    int wynik;
+    int result;
     for(const auto& card_ptr: hand_){
-        wynik += card_ptr->getCardValue();
+        result += int(card_ptr->getCardValue());
     }
-    if(wynik > 21){
-        wynik -= 10*ace_num;
+    if(result > 21){
+        result -= 10*ace_num;
     }
-    
-    return wynik;
+    return result;
 }
 
-void Hand::add_card(const Card& card){
+void Hand::add_card(Card& card){
     hand_.push_back(&card);
-    if(card.getCardValue == 1){
+    if(card.getCardValue() == Card_Value_t::ace){
         ++ace_num;
-        value_ += 1;
-    } else{
-        value_ += card.getCardValue;
     }
+    value_ += int(card.getCardValue());
 }
 
-void Hand::add_card(const Card* card_ptr) {
+void Hand::add_card(Card* card_ptr) {
     hand_.push_back(card_ptr);
-    if(card_ptr->getCardValue == 1){
+    if(card_ptr->getCardValue() == Card_Value_t::ace){
         ++ace_num;
-        value_ += 1;
-    } else{
-        value_ += card_ptr->getCardValue;
     }
+    value_ += int(card_ptr->getCardValue());
 }
+
 
 const Card* DeckOfCards::getTopCard()
 {
@@ -114,4 +114,50 @@ int Card::getCardIntValue() const
             return 0;
     }
 
+}
+
+std::string Card_Value_to_string(const Card_Value_t& cardValue ){
+    switch(cardValue) {
+        case Card_Value_t::ace:
+            return "Ace";
+        case Card_Value_t::two:
+            return "Two";
+        case Card_Value_t::three:
+            return "Three";
+        case Card_Value_t::four:
+            return "Four";
+        case Card_Value_t::five:
+            return "Five";
+        case Card_Value_t::six:
+            return "Six";
+        case Card_Value_t::seven:
+            return "Seven";
+        case Card_Value_t::eight:
+            return "Eight";
+        case Card_Value_t::nine:
+            return "Nine";
+        case Card_Value_t::ten:
+            return "Ten";
+        case Card_Value_t::jack:
+            return "Jack";
+        case Card_Value_t::queen:
+            return "Queen";
+        case Card_Value_t::king:
+            return "King";
+        default:
+            return "Unknown";
+    }
+}
+
+std::string Card_Color_to_string(const Card_Color_t& cardColor ){
+    switch (cardColor) {
+        case Card_Color_t::pikes:
+            return "Pikes";
+        case Card_Color_t::hearts:
+            return "Hearts";
+        case Card_Color_t::diamonds:
+            return "Diamonds";
+        case Card_Color_t::clover:
+            return "Clover";
+    }
 }

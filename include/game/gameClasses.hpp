@@ -99,26 +99,25 @@ class Hand{
 public:
     //kontruktory
     Hand(const Hand& ) = default; //kopiujący
-
-    Hand(const std::vector<Card*>& list = {}): hand_(list);
+    Hand(const std::vector<Card*>& list = {});
 
     //destruktor
     ~Hand() = default;
-
-    Hand& operator = (const Hand& hand){ return hand_};//kopiujący operator przypisania
+    //TODO można go dodać bo nie działa...
+    Hand& operator = (const Hand& hand) = default;//kopiujący operator przypisania
 
     //metody
     std::string printHand() const;//zwraca reke jako stringa
 
     int handValue() const;//zwraca wartosc kart na rece
 
-    void add_card(const Card& card);//dodawanie karty do reki
-    void add_card(const Card* card_ptr);// dodawawanie karty do reki
+    void add_card(Card& card);//dodawanie karty do reki
+    void add_card(Card* card_ptr);// dodawawanie karty do reki
 
 
-    //przeciązony operator []
-    Hand& operator [](std::size_t pos) {return hand_[pos]};//operator przypisania
-    const Hand& operator [](std::size_t pos) const {return hand_[pos]}; //inspektor
+    //przeciazony operator []
+    Card* operator [](std::size_t pos) {return hand_[pos];};//operator przypisania
+    const Card* operator [](std::size_t pos) const {return hand_[pos];}; //inspektor
 
     //iteratry dla  kontenera
     std::vector<Card*>::const_iterator cbegin() const { return hand_.cbegin(); }
@@ -137,9 +136,9 @@ private:
 
 };
 
+std::string Card_Value_to_string(const Card_Value_t& cardValue );
 
-
+std::string Card_Color_to_string(const Card_Color_t& cardColor );
 
 
 #endif //GAME_CLASSES_H_
-
