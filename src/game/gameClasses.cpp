@@ -4,7 +4,7 @@
 #include <ostream>
 
 
-Hand::Hand(const std::vector<Card*>& list) : hand_(list)
+Hand::Hand(const std::vector<const Card*>& list) : hand_(list)
     {
         value_ = 0;
         for(const auto& card_ptr : list)
@@ -46,7 +46,7 @@ void Hand::add_card(Card& card){
     value_ += int(card.getCardValue());
 }
 
-void Hand::add_card(Card* card_ptr) {
+void Hand::add_card(const Card* card_ptr) {
     hand_.push_back(card_ptr);
     if(card_ptr->getCardValue() == Card_Value_t::ace){
         ++ace_num;
@@ -168,20 +168,23 @@ std::string Card_Color_to_string(const Card_Color_t& cardColor ){
             return "Error";
     }
 }
-// void Dealer::dealInitialHand(Hand& playerHand, Hand& dealerHand) {
-//     // Rozdaj dwie karty graczowi i jedną krupierowi (pierwsza karta krupiera zakryta)
-//     playerHand.add_card(deck_.getTopCard());
-//     dealerHand.add_card(deck_.getTopCard());
-//     playerHand.add_card(deck_.getTopCard());
-//     dealerHand.add_card(deck_.getTopCard());
-// }
 
-// void Dealer::playTurn(Hand& playerHand, Hand& dealerHand) {
-//     // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
-//     while (dealerHand.handValue() < 17) {
-//         dealerHand.add_card(deck_.getTopCard());
-//     }
-// }
+
+void Dealer::dealInitialHand(Gamer& gamer, DeckOfCards& deck) {
+    
+    for(std::size_t i = 0; i < 2; i++)
+    {
+        add_card(deck.getTopCard());
+        gamer.add_card(deck.getTopCard());
+    }
+}
+
+void Dealer::playTurn(DeckOfCards& deck) {
+    // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
+    while (handValue() < 17) {
+            add_card(deck.getTopCard());
+    }
+}
 
 // void Dealer::revealHand() const {
 //     // Odsłonięcie kart krupiera
