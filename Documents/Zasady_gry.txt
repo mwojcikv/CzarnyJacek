@@ -1,0 +1,28 @@
+Podstawowy opis gry Blackjack:
+
+Wartość kart:
+	Karty od 2 do 10 mają wartość równą swojej liczbie punktów.
+	Walet, Królowa i Król mają wartość 10 punktów.
+	As może mieć wartość 1 lub 11 punktów, w zależności od tego, co bardziej pasuje do danej ręki.
+Cel gry:
+	Celem jest uzyskanie ręki, której suma wartości kart będzie jak najbliższa, ale nie przekroczy 21 punktów.
+Rozpoczęcie gry:
+	Gracze stawiają początkowe zakłady przed rozpoczęciem rozdania kart.
+	Każdy gracz i krupier otrzymują dwie karty.
+Ruchy gracza:
+	Gracz ma kilka opcji:
+	"Hit" (dobranie): Gracz otrzymuje kolejną kartę.
+	"Stand" (stanie): Gracz nie dobiera już kart i pozostaje przy aktualnej ręce.
+	"Double" (podwajanie): Gracz podwaja swoją początkową stawkę i otrzymuje dokładnie jedną dodatkową kartę.
+	"Split" (dzielenie): Jeśli dwie początkowe karty gracza są tego samego rodzaju, gracz może podzielić je na dwie oddzielne ręce, stawiając dodatkowy zakład.
+Ruchy krupiera:
+	Krupier ma obowiązek dobrać karty do momentu, gdy suma punktów w jego ręce wynosi co najmniej 17 punktów.
+	Jeśli suma punktów krupiera przekracza 21, gracze wygrywają.
+Wygrana i przegrana:
+	Gracz wygrywa, jeśli jego ręka ma więcej punktów niż ręka krupiera, ale nie przekracza 21.
+	Jeśli gracz uzyska dokładnie 21 punktów na dwóch pierwszych kartach (As i 10-punktowa karta), mówi się o "blackjacku" i gracz otrzymuje wyższy zwykle wypłacalny stosunek(3:2).
+	Gracz przegrywa, jeśli jego ręka przekroczy 21 punktów lub jeśli ręka krupiera ma więcej punktów niż ręka gracza.
+Remis:
+	Jeśli suma punktów w rękach gracza i krupiera jest taka sama, jest to remis, a gracz odzyskuje swoje zakłady.
+Ubezpieczenie:
+	Gracz może zdecydować się na ubezpieczenie, jeśli krupier ma Asa jako swoją pierwszą kartę. Ubezpieczenie polega na postawieniu dodatkowego zakładu, który będzie wypłacany w 	przypadku, gdy krupier ma blackjacka.

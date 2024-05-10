@@ -2,8 +2,7 @@
 #include "game/gameRules.hpp"
 #include "gui/commandLineInterface.hpp"
 
-
-int main(void)
-{
+int main(void) {
+    interface(); //run interface
     return 0;
 }
