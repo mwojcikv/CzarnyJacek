@@ -4,12 +4,12 @@
 #include <ostream>
 
 
-Hand::Hand(const std::vector<const Card*>& list) : hand_(list)
+Hand::Hand(std::vector<std::unique_ptr<Card>> list) : hand_(std::move(list))
     {
         value_ = 0;
         for(const auto& card_ptr : list)
         {
-            if(card_ptr->getCardValue() == Card_Value_t::ace)
+            if(card_ptr.get()->getCardValue() == Card_Value_t::ace)
             {
                 ace_num += 1;
             }
@@ -39,25 +39,26 @@ int Hand::handValue() const{
 }
 
 void Hand::add_card(Card& card){
-    hand_.push_back(&card);
+    hand_.push_back(std::make_unique<Card>(card.getCardColor(), card.getCardValue()));
     if(card.getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
     value_ += int(card.getCardValue());
 }
 
-void Hand::add_card(const Card* card_ptr) {
-    hand_.push_back(card_ptr);
-    if(card_ptr->getCardValue() == Card_Value_t::ace){
+void Hand::add_card(std::unique_ptr<Card> card_ptr) {
+    hand_.push_back(std::make_unique<Card>());
+    hand_.back() = std::move(card_ptr);
+    if(card_ptr.get()->getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
     value_ += int(card_ptr->getCardValue());
 }
 
 
-const Card* DeckOfCards::getTopCard()
+std::unique_ptr<Card> DeckOfCards::getTopCard()
 {
-    const Card* lastCard = (deck_.back()).get();
+    std::unique_ptr<Card> lastCard = std::move(deck_.back());
     deck_.pop_back();
     return lastCard;
 }
@@ -174,7 +175,7 @@ void Dealer::dealInitialHand(Gamer& gamer, DeckOfCards& deck) {
     
     for(std::size_t i = 0; i < 2; i++)
     {
-        add_card(deck.getTopCard());
+        this -> add_card(deck.getTopCard());
         gamer.add_card(deck.getTopCard());
     }
 }
@@ -182,14 +183,11 @@ void Dealer::dealInitialHand(Gamer& gamer, DeckOfCards& deck) {
 void Dealer::playTurn(DeckOfCards& deck) {
     // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
     while (handValue() < 17) {
-            add_card(deck.getTopCard());
+            this -> add_card(deck.getTopCard());
     }
 }
-
-// void Dealer::revealHand() const {
-//     // Odsłonięcie kart krupiera
-//     std::cout << "Dealer's hand:\n";
-//     for (auto card : deck_) {
-//         std::cout << "Color: " << static_cast<int>(card->getCardColor()) << ", Value: " << static_cast<int>(card->getCardValue()) << "\n";
-//     }
-// }
+void Dealer::revealHand() const {
+    // Odsłonięcie kart krupiera
+    std::cout << "Dealer's hand:\n";
+    printHand();
+}

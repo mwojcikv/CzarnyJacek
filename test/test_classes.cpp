@@ -67,10 +67,11 @@ TEST(DeckOfCardsTest, shuffle)
 }
 
 
-//TODO dopisz test
-TEST(test_game_classes_hand, printHand_test){
+// //TODO dopisz test
+// TEST(HandTest, printHand){
 
-}
+
+// }
 
 // TEST(test_game_classes_hand,  operator_[]_test){
 
@@ -88,3 +89,16 @@ TEST(test_game_classes_hand, printHand_test){
 
 
 // }
+
+TEST(DealerTest, dealInitialHand)
+{
+    Dealer deal;
+    Gamer gam;
+    DeckOfCards deck;
+
+    deal.dealInitialHand(gam, deck);
+    
+    EXPECT_EQ(gam.numOfCards(), 2);
+    EXPECT_EQ(deal.numOfCards(), 2);
+    EXPECT_EQ(deck.numOfCards(), 48);
+}
