@@ -37,8 +37,8 @@ TEST(DeckOfCardsTest, constructor)
     DeckOfCards basic;
     Card card(Card_Color_t::clover, Card_Value_t::ace);
     EXPECT_EQ(basic.numOfCards(), 52);
-    EXPECT_EQ((*basic[0]).getCardColor(), card.getCardColor());
-    EXPECT_EQ((*basic[0]).getCardValue(), card.getCardValue());
+    EXPECT_EQ(basic[0].getCardColor(), card.getCardColor());
+    EXPECT_EQ(basic[0].getCardValue(), card.getCardValue());
 
 }
 
@@ -50,20 +50,20 @@ TEST(DeckOfCardsTest, shuffle)
     DeckOfCards basic;
     Card card(Card_Color_t::clover, Card_Value_t::ace);
     EXPECT_EQ(basic.numOfCards(), 52);
-    EXPECT_EQ(basic[0] -> getCardColor(), card.getCardColor());
-    EXPECT_EQ(basic[0] -> getCardValue(), card.getCardValue());
+    EXPECT_EQ(basic[0].getCardColor(), card.getCardColor());
+    EXPECT_EQ(basic[0].getCardValue(), card.getCardValue());
 
     basic.shuffleDeck();
     
-    EXPECT_NE((*basic[0]).getCard(), card.getCard());
+    EXPECT_NE(basic[0].getCard(), card.getCard());
 
 
-    Card_Color_t color_2 = (*basic[0]).getCardColor();
-    Card_Value_t value_2 = (*basic[0]).getCardValue();
+    Card_Color_t color_2 = basic[0].getCardColor();
+    Card_Value_t value_2 = basic[0].getCardValue();
     Card card2(color_2, value_2);
 
     basic.shuffleDeck();
-    EXPECT_NE((*basic[0]).getCard(), card2.getCard());
+    EXPECT_NE(basic[0].getCard(), card2.getCard());
 }
 
 
