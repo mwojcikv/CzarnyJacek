@@ -71,8 +71,6 @@ void interface() {
 }
 
 
-// using namespace cv;
-
 // int wczytaj_kartę() {
 //     // Lista nazw plików z kartami
 //   // Tutaj będą dodawane karty z tali
@@ -102,4 +100,5 @@ void interface() {
 // }
 
 // kod jest narazie szkieletem orginalnej wersji ale mniej więcej na tym będzie polegała inplementacja kart i wyswietlanie je w formacie .jpg
+//zabieram się za refrokturyzację tej funkcji jako ze nie spełnia założeń projektu
 
