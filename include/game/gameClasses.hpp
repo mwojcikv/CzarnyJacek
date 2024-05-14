@@ -49,6 +49,9 @@ class Card
 
         Card(const Card&) = default;
 
+        constexpr Card& operator = (const Card&);
+
+        
         Card_Color_t getCardColor() const { return card_.first; }        
         Card_Value_t getCardValue() const { return card_.second; }
         card_t       getCard() const { return card_; }
@@ -56,6 +59,7 @@ class Card
         int getCardIntValue() const;
         
         ~Card() = default;
+
     private:
         card_t card_;
 };
@@ -69,27 +73,27 @@ class DeckOfCards
 
     DeckOfCards(const DeckOfCards&) = default;
 
-    const Card* operator[](std::size_t n) const {return deck_[n].get();} 
-    Card* operator[](std::size_t n)  {return deck_[n].get();}
-    
-
+    const Card operator[](std::size_t n) const {return deck_[n];} 
+    Card operator[](std::size_t n) {return deck_[n];} 
+   
     std::size_t numOfCards() const {return deck_.size();}
-    const Card* getTopCard();
+    Card& getTopCard();
+
     void shuffleDeck();
 
-    std::vector<std::unique_ptr<Card>>::iterator begin() {return deck_.begin();}
-    std::vector<std::unique_ptr<Card>>::const_iterator begin() const {return deck_.cbegin();}
-    std::vector<std::unique_ptr<Card>>::const_iterator cbegin() const {return deck_.cbegin();}
+    std::vector<Card>::iterator begin() {return deck_.begin();}
+    std::vector<Card>::const_iterator begin() const {return deck_.cbegin();}
+    std::vector<Card>::const_iterator cbegin() const {return deck_.cbegin();}
     
-    std::vector<std::unique_ptr<Card>>::iterator end() {return deck_.end();}
-    std::vector<std::unique_ptr<Card>>::const_iterator end() const {return deck_.cend();}
-    std::vector<std::unique_ptr<Card>>::const_iterator cend() const {return deck_.cend();}
+    std::vector<Card>::iterator end() {return deck_.end();}
+    std::vector<Card>::const_iterator end() const {return deck_.cend();}
+    std::vector<Card>::const_iterator cend() const {return deck_.cend();}
 
 
     ~DeckOfCards() = default;
 
     private:
-        std::vector<std::unique_ptr<Card>> deck_;
+        std::vector<Card> deck_;
 
 };
 
@@ -98,8 +102,8 @@ class Hand{
 public:
     //kontruktory
 
-    Hand(const std::vector<Card*>& list = {});
-
+    Hand(std::vector<Card> list = {});
+    
     //destruktor
 
     Hand& operator = (const Hand& hand) = default;//kopiujący operator przypisania
@@ -110,41 +114,57 @@ public:
     int handValue() const;//zwraca wartosc kart na rece
 
     void add_card(Card& card);//dodawanie karty do reki
-    void add_card(Card* card_ptr);// dodawawanie karty do reki
 
+    std::size_t numOfCards() const {return hand_.size();}   // zwraca ilość kart w ręce
 
     //przeciazony operator []
-    Card* operator [](std::size_t pos) {return hand_[pos];};//operator przypisania
-    const Card* operator [](std::size_t pos) const {return hand_[pos];}; //inspektor
+    const Card operator [](std::size_t pos) const {return hand_[pos];} 
+    Card operator [](std::size_t pos) {return hand_[pos];}
+
 
     //iteratry dla  kontenera
-    std::vector<Card*>::const_iterator cbegin() const { return hand_.cbegin(); }
-    std::vector<Card*>::const_iterator begin() const { return hand_.begin(); }
-    std::vector<Card*>::iterator begin() { return hand_.begin(); }
-    std::vector<Card*>::const_iterator cend() const { return hand_.cend(); }
-    std::vector<Card*>::const_iterator end() const { return hand_.end(); }
-    std::vector<Card*>::iterator end() { return hand_.end(); }
+    std::vector<Card>::const_iterator cbegin() const { return hand_.cbegin(); }
+    std::vector<Card>::const_iterator begin() const { return hand_.begin(); }
+    std::vector<Card>::iterator begin() { return hand_.begin(); }
+    std::vector<Card>::const_iterator cend() const { return hand_.cend(); }
+    std::vector<Card>::const_iterator end() const { return hand_.end(); }
+    std::vector<Card>::iterator end() { return hand_.end(); }
   
-    virtual ~Hand() = 0;
+    virtual ~Hand() = default;
 
 private:
     //konterner któy zawiera ręke gracza
-    std::vector<Card*> hand_;
+    std::vector<Card> hand_;
     inline static int ace_num =0;
     int value_;
+
+};
+
+class Gamer : public Hand
+{
+    public:
+        Gamer(std::vector<Card> list = {}) : Hand(list) {}
+        Gamer(const Gamer&) = default;
+
+       
+        void takeCard(Hand& playerHand, Hand& GamerHand); // pociągnij kartę
+        void passGame() const; // poddaj się
+
+        ~Gamer() = default; 
+    private: 
 
 };
 
 class Dealer : public Hand
 {
     public:
-        Dealer(const std::vector<Card*>& list = {});
+        Dealer(std::vector<Card> list = {}) : Hand(list) {}
 
         Dealer(const Dealer&) = default;
 
-        
-        void dealInitialHand(Hand& playerHand, Hand& dealerHand); // Rozdanie dwóch początkowych kart graczowi i krupierowi
-        void playTurn(Hand& playerHand, Hand& dealerHand); // Obsługa ruchu krupiera
+        void dealInitialHand(Gamer& gamer, DeckOfCards& deck);
+        void showFirstCard();
+        void playTurn(DeckOfCards& deck); // Obsługa ruchu krupiera
         void revealHand() const; // Odsłonięcie kart krupiera
 
         bool isGameLost() { return (handValue() > 21);}
@@ -158,9 +178,10 @@ class Dealer : public Hand
 };
 
 
+
+
 std::string Card_Value_to_string(const Card_Value_t& cardValue );
 
 std::string Card_Color_to_string(const Card_Color_t& cardColor );
-
 
 #endif //GAME_CLASSES_H_
