@@ -1,13 +1,14 @@
 cmake_minimum_required(VERSION 3.25)
 
 set(PROJECT_ID CzarnyJacek)
+project(CzarnyJacek)
 
-include_directories(include/gui)
+include_directories(include)
 
 set(SOURCE_FILES
-        src/game/gameRules.cpp
-        src/game/gameClasses.cpp
         src/gui/commandLineInterface.cpp
+        src/game/gameClasses.cpp
+        src/game/gameRules.cpp
         )
 
 set(SOURCES_FILES_TESTS
@@ -16,3 +17,4 @@ set(SOURCES_FILES_TESTS
         )
 
 include(./SetCommonConfig.cmake)
+
