@@ -9,3 +9,5 @@ lub z linka https://sourceforge.net/projects/opencvlibrary/files/
 4.Skonfiguruj środowisko deweloperskie C++, aby kompilator mógł znaleźć pliki nagłówkowe i biblioteki OpenCV. Możesz to zrobić w ustawieniach swojego IDE lub w ustawieniach kompilatora.
 
 5.Po zainstalowaniu OpenCV 4, możesz użyć go w swoich projektach C++ i/lub Python, jak w przykładzie, który podałem wcześniej. Upewnij się, że ścieżki do plików nagłówkowych i bibliotek OpenCV są poprawnie skonfigurowane w projekcie
+
+/
