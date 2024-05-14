@@ -7,12 +7,11 @@
 Hand::Hand(const std::vector<Card*>& list): hand_(list){
     {
         for(const auto& card_ptr: list){
-            if(card_ptr->getCardIntValue() == 1){
+            if(card_ptr->getCardValue() == Card_Value_t::ace){
                 ace_num += 1;
             }
         }
-        int result = this->value_;
-        value_ = result;
+        value_ = this->handValue();
     }
 };
 
@@ -41,7 +40,7 @@ void Hand::add_card(Card& card){
     if(card.getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
-    value_ += int(card.getCardValue());
+    value_ += card.getCardIntValue();
 }
 
 void Hand::add_card(Card* card_ptr) {
@@ -49,7 +48,12 @@ void Hand::add_card(Card* card_ptr) {
     if(card_ptr->getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
-    value_ += int(card_ptr->getCardValue());
+    value_ += card_ptr->getCardIntValue();
+}
+void Hand::handClear(){
+    ace_num = 0;
+    value_ =0;
+    hand_.clear();
 }
 
 

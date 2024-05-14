@@ -97,7 +97,7 @@ class DeckOfCards
 class Hand{
 public:
     //kontruktory
-    Hand(const Hand& ) = default; //kopiujący
+    Hand(const Hand&) = default; //kopiujący
     Hand(const std::vector<Card*>& list = {});
 
     //destruktor
@@ -110,9 +110,10 @@ public:
 
     int handValue() const;//zwraca wartosc kart na rece
 
-    void add_card(Card& card);//dodawanie karty do reki
-    void add_card(Card* card_ptr);// dodawawanie karty do reki
+    void add_card(Card& card) ;//dodawanie karty do reki
+    void add_card(Card* card_ptr) ;// dodawawanie karty do reki
 
+    void handClear();
 
     //przeciazony operator []
     Card* operator [](std::size_t pos) {return hand_[pos];};//operator przypisania
@@ -128,9 +129,8 @@ public:
 
 private:
     //konterner któy zawiera ręke gracza
-    //TODO zastanowic się nad rodzajem relacji miedzy klasami czy na pewno kompozycja
     std::vector<Card*> hand_;
-    inline static int ace_num =0;
+    inline static int ace_num = 0;
     int value_;
 
 };
