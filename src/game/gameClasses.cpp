@@ -18,16 +18,16 @@ constexpr Card& Card::operator=(const Card& other) {
     return *this; // Return a reference to the modified object
 }
 
-Hand::Hand(std::vector<Card> list) : hand_(list)
+Hand::Hand(std::vector<std::unique_ptr<Card>> list) : hand_(list)
     {
         value_ = 0;
         for(const auto& card : list)
         {
-            if(card.getCardValue() == Card_Value_t::ace)
+            if(card -> getCardValue() == Card_Value_t::ace)
             {
                 ace_num += 1;
             }
-            value_ += card.getCardIntValue();
+            value_ += card -> getCardIntValue();
         }
     }
 
@@ -36,7 +36,7 @@ Hand::Hand(std::vector<Card> list) : hand_(list)
 std::string Hand::printHand() const{
     std::ostringstream oss;
     for(const auto& card: hand_){
-        oss<< Card_Value_to_string( card.getCardValue())<< " of "<< Card_Color_to_string(card.getCardColor())<< "\n";
+        oss << Card_Value_to_string( card -> getCardValue())<< " of "<< Card_Color_to_string(card -> getCardColor())<< "\n";
     }
     return oss.str();
 }
@@ -44,7 +44,7 @@ std::string Hand::printHand() const{
 int Hand::handValue() const{
     int result;
     for(const auto& card_ptr: hand_){
-        result += int(card_ptr.getCardValue());
+        result += int(card_ptr -> getCardValue());
     }
     if(result > 21){
         result -= 10*ace_num;
@@ -52,34 +52,25 @@ int Hand::handValue() const{
     return result;
 }
 
-void Hand::add_card(Card& card){
-    hand_.push_back(card);
-    if(card.getCardValue() == Card_Value_t::ace){
+void Hand::add_card(std::unique_ptr<Card> card){
+    hand_.push_back(std::move(card));
+    if(card -> getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
-    value_ += int(card.getCardValue());
+    value_ += int(card -> getCardValue());
 }
 
 
 
-
-Card& DeckOfCards::getTopCard()
+void DeckOfCards::getTopCard(Hand* hand)
 {
-    Card& lastCard = deck_.back();
+    hand -> add_card(std::move(deck_.back()));
     deck_.pop_back();
-    return lastCard;
+
 }
 
 void DeckOfCards::shuffleDeck(){
-    // unsigned seed = 0;
-    
-    // std::vector<Card>::iterator first = deck_.begin();
-    // std::vector<Card>::iterator last = deck_.end();
-    
-    // for (auto i=(last-first)-1; i>0; --i) {
-    //     std::uniform_int_distribution<decltype(i)> d(0,i);
-    //     swapping(first[i], first[d(std::default_random_engine(seed))]);
-    // }
+
      std::random_shuffle(deck_.begin(), deck_.end());
 
 }
@@ -92,7 +83,7 @@ DeckOfCards::DeckOfCards(std::size_t numOf52Decks)
         {
             for(const auto& v : all_values)
             {
-                deck_.push_back(Card(c,v));
+                deck_.push_back(std::make_unique<Card>(c,v));
             }
         }
     }
@@ -124,11 +115,11 @@ int Card::getCardIntValue() const
         case(Card_Value_t::ten): 
             return 10;
         case(Card_Value_t::jack):
-            return 2;
+            return 10;
         case(Card_Value_t::queen): 
-            return 3;
+            return 10;
         case(Card_Value_t::king): 
-            return 4;
+            return 10;
         default: 
             return 0;
     }
@@ -187,19 +178,19 @@ std::string Card_Color_to_string(const Card_Color_t& cardColor ){
 }
 
 
-void Dealer::dealInitialHand(Gamer& gamer, DeckOfCards& deck) {
+void Dealer::dealInitialHand(Gamer* gamer, DeckOfCards* deck) {
     
     for(std::size_t i = 0; i < 2; i++)
     {
-        this -> add_card(deck.getTopCard());
-        gamer.add_card(deck.getTopCard());
+        deck -> getTopCard(this);
+        deck -> getTopCard(gamer);
     }
 }
 
 void Dealer::playTurn(DeckOfCards& deck) {
     // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
     while (this -> handValue() < 17) {
-            this -> add_card(deck.getTopCard());
+            deck.getTopCard(this);
     }
 }
 void Dealer::revealHand() const {
