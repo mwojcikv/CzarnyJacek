@@ -48,8 +48,8 @@ class Card
         Card(Card_Color_t color = Card_Color_t::clover, Card_Value_t value = Card_Value_t::ace) : card_(color, value) {}
 
         Card(const Card&) = default;
-
-        constexpr Card& operator = (const Card&);
+        //TODO on nie działa naprawić trzeba
+//        constexpr Card& operator = (const Card&);
 
         
         Card_Color_t getCardColor() const { return card_.first; }        
@@ -115,12 +115,19 @@ public:
 
     void add_card(Card& card);//dodawanie karty do reki
 
+    const Card get_card(std::size_t pos) const {return  hand_[pos];}
+
+    void set_card(const Card& card, std::size_t pos) {hand_[pos] = card; value_+= card.getCardIntValue();}
+
+    int get_ace_num() const {return ace_num;}
+
+    int get_value_raw() const {return value_;}
+
     std::size_t numOfCards() const {return hand_.size();}   // zwraca ilość kart w ręce
 
     //przeciazony operator []
-    const Card operator [](std::size_t pos) const {return hand_[pos];} 
+    const Card operator [](std::size_t pos) const {return hand_[pos];}
     Card operator [](std::size_t pos) {return hand_[pos];}
-
 
     //iteratry dla  kontenera
     std::vector<Card>::const_iterator cbegin() const { return hand_.cbegin(); }

@@ -11,27 +11,22 @@ void swapping(Card& card1, Card& card2)
 }
 
 
-constexpr Card& Card::operator=(const Card& other) {
-    if (this != &other) { // Check for self-assignment
-        card_ = other.getCard(); // Assign the card pair from the other Card object
-    }
-    return *this; // Return a reference to the modified object
-}
+//constexpr Card& Card::operator=(const Card& other) {
+//    if (this != &other) { // Check for self-assignment
+//        card_ = other.getCard(); // Assign the card pair from the other Card object
+//    }
+//    return *this; // Return a reference to the modified object
+//}
 
-Hand::Hand(std::vector<Card> list) : hand_(list)
-    {
-        value_ = 0;
+Hand::Hand(std::vector<Card> list) : hand_(list), value_(0){
         for(const auto& card : list)
         {
             if(card.getCardValue() == Card_Value_t::ace)
             {
                 ace_num += 1;
             }
-            value_ += card.getCardIntValue();
         }
     }
-
-
 
 std::string Hand::printHand() const{
     std::ostringstream oss;
@@ -57,11 +52,8 @@ void Hand::add_card(Card& card){
     if(card.getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
-    value_ += int(card.getCardValue());
+    value_ += card.getCardIntValue();
 }
-
-
-
 
 Card& DeckOfCards::getTopCard()
 {
