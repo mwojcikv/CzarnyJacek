@@ -111,7 +111,7 @@ public:
     //kontruktory
 
     
-    Hand() {}
+    Hand() : value_(0){}
     
     //destruktor
 
@@ -172,7 +172,7 @@ class Dealer : public Hand
 
         void dealInitialHand(Gamer* gamer, DeckOfCards* deck);
         void showFirstCard();
-        void playTurn(DeckOfCards& deck); // Obsługa ruchu krupiera
+        void playTurn(DeckOfCards* deck); // Obsługa ruchu krupiera
         void revealHand() const; // Odsłonięcie kart krupiera
 
         bool isGameLost() { return (handValue() > 21);}

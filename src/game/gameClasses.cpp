@@ -23,12 +23,12 @@ std::string Hand::printHand() const{
 }
 
 int Hand::handValue() const{
-    int result;
+    int result = 0;
     for(const auto& card_ptr: hand_){
-        result += int(card_ptr -> getCardValue());
+        result += int(card_ptr -> getCardIntValue());
     }
     if(result > 21){
-        result -= 10*ace_num;
+        // result -= 10*ace_num;
     }
     return result;
 }
@@ -169,14 +169,15 @@ void Dealer::dealInitialHand(Gamer* gamer, DeckOfCards* deck) {
     }
 }
 
-void Dealer::playTurn(DeckOfCards& deck) {
+void Dealer::playTurn(DeckOfCards* deck) {
     // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
-    while (this -> handValue() < 17) {
-            deck.getTopCard(this);
+    if(this -> handValue() < 17)
+    {
+            deck -> getTopCard(this);
     }
 }
 void Dealer::revealHand() const {
     // Odsłonięcie kart krupiera
     std::cout << "Dealer's hand:\n";
-    printHand();
+    std::cout << this -> printHand();
 }

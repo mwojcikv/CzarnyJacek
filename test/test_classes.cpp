@@ -103,3 +103,28 @@ TEST(DealerTest, dealInitialHand)
     EXPECT_EQ(deck.numOfCards(), 48);
 }
 
+TEST(DealerTest, playTurn)
+{
+    Dealer deal;
+
+    DeckOfCards deck;
+
+    deck.shuffleDeck();
+    
+    deck.shuffleDeck();
+    deal.playTurn(&deck);
+    
+    EXPECT_EQ(deal.numOfCards(), 1);
+
+    int n_1 = 0;
+    int n = 1;
+    while(n_1 != n )
+    {
+        n_1 = n;
+        deal.playTurn(&deck);
+        n = deal.handValue(); 
+    
+    }
+
+   deal.revealHand();
+}
