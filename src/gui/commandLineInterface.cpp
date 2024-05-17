@@ -72,27 +72,27 @@ void interface() {
 
 std::string imagePath = "Pomiar_nadajnik.jpg";
 
-void displayImage(const std::string& imagePath) {
-    sf::RenderWindow window(sf::VideoMode(1000, 800), "Wyświetlanie karty PNG");
+// void displayImage(const std::string& imagePath) {
+//     sf::RenderWindow window(sf::VideoMode(1000, 800), "Wyświetlanie karty PNG");
 
-    sf::Texture cardTexture;
-    if (!cardTexture.loadFromFile(imagePath)) {
-        return;
-    }
+//     sf::Texture cardTexture;
+//     if (!cardTexture.loadFromFile(imagePath)) {
+//         return;
+//     }
 
-    sf::Sprite cardSprite;
-    cardSprite.setTexture(cardTexture);
+//     sf::Sprite cardSprite;
+//     cardSprite.setTexture(cardTexture);
 
-    while (window.isOpen()) {
-        sf::Event event;
-        while (window.pollEvent(event)) {
-            if (event.type == sf::Event::Closed) {
-                window.close();
-            }
-        }
+//     while (window.isOpen()) {
+//         sf::Event event;
+//         while (window.pollEvent(event)) {
+//             if (event.type == sf::Event::Closed) {
+//                 window.close();
+//             }
+//         }
 
-        window.clear();
-        window.draw(cardSprite);
-        window.display();
-    }
-}
+//         window.clear();
+//         window.draw(cardSprite);
+//         window.display();
+//     }
+// }

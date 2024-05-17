@@ -3,12 +3,7 @@
 #include <iostream>
 #include <ostream>
 
-void swapping(Card& card1, Card& card2)
-{
-    Card& temp = card1;
-    card1 = card2;
-    card1 = temp;
-}
+
 
 
 constexpr Card& Card::operator=(const Card& other) {
@@ -17,20 +12,6 @@ constexpr Card& Card::operator=(const Card& other) {
     }
     return *this; // Return a reference to the modified object
 }
-
-Hand::Hand(std::vector<std::unique_ptr<Card>> list) : hand_(list)
-    {
-        value_ = 0;
-        for(const auto& card : list)
-        {
-            if(card -> getCardValue() == Card_Value_t::ace)
-            {
-                ace_num += 1;
-            }
-            value_ += card -> getCardIntValue();
-        }
-    }
-
 
 
 std::string Hand::printHand() const{
@@ -53,11 +34,12 @@ int Hand::handValue() const{
 }
 
 void Hand::add_card(std::unique_ptr<Card> card){
-    hand_.push_back(std::move(card));
-    if(card -> getCardValue() == Card_Value_t::ace){
-        ++ace_num;
+   
+    if(card.get() -> getCardValue() == Card_Value_t::ace){
+        ace_num ++;
     }
-    value_ += int(card -> getCardValue());
+    value_ += int(card.get() -> getCardIntValue());
+    hand_.emplace_back(std::move(card));
 }
 
 

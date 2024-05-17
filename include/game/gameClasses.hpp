@@ -80,8 +80,9 @@ class DeckOfCards
 
     DeckOfCards(const DeckOfCards&) = default;
 
-    std::unique_ptr<Card> operator[](std::size_t n) {return std::move(deck_[n]);} 
-    
+    Card* operator[](std::size_t n) const {return deck_[n].get();} 
+    // std::unique_ptr<Card> operator[](std::size_t n) {return std::move(deck_[n]);} 
+
     std::size_t numOfCards() const {return deck_.size();}
 
     void getTopCard(Hand* hand);
@@ -109,7 +110,8 @@ class Hand{
 public:
     //kontruktory
 
-    Hand(std::vector<std::unique_ptr<Card>> list = {});
+    
+    Hand() {}
     
     //destruktor
 
@@ -149,7 +151,7 @@ private:
 class Gamer : public Hand
 {
     public:
-        Gamer(std::vector<std::unique_ptr<Card>> list = {}) : Hand(list) {}
+        Gamer() : Hand() {}
         Gamer(const Gamer&) = default;
 
        
@@ -164,7 +166,7 @@ class Gamer : public Hand
 class Dealer : public Hand
 {
     public:
-        Dealer(std::vector<std::unique_ptr<Card>> list = {}) : Hand(list) {}
+        Dealer() : Hand() {}
 
         Dealer(const Dealer&) = default;
 
