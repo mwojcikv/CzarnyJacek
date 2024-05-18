@@ -117,13 +117,13 @@ public:
 
     const Card get_card(std::size_t pos) const {return  hand_[pos];}
 
-    void set_card(const Card& card, std::size_t pos) {hand_[pos] = card; value_+= card.getCardIntValue();}
+    void set_card(const Card& card, std::size_t pos);
 
     int get_ace_num() const {return ace_num;}
 
-    int get_value_raw() const {return value_;}
-
     std::size_t numOfCards() const {return hand_.size();}   // zwraca ilość kart w ręce
+
+    void clear_hand();
 
     //przeciazony operator []
     const Card operator [](std::size_t pos) const {return hand_[pos];}
@@ -142,8 +142,7 @@ public:
 private:
     //konterner któy zawiera ręke gracza
     std::vector<Card> hand_;
-    inline static int ace_num =0;
-    int value_;
+    inline static int ace_num = 0;
 
 };
 
@@ -183,9 +182,6 @@ class Dealer : public Hand
         ~Dealer() = default; 
 
 };
-
-
-
 
 std::string Card_Value_to_string(const Card_Value_t& cardValue );
 

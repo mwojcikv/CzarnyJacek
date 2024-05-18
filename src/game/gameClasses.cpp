@@ -18,7 +18,7 @@ void swapping(Card& card1, Card& card2)
 //    return *this; // Return a reference to the modified object
 //}
 
-Hand::Hand(std::vector<Card> list) : hand_(list), value_(0){
+Hand::Hand(std::vector<Card> list) : hand_(list){
         for(const auto& card : list)
         {
             if(card.getCardValue() == Card_Value_t::ace)
@@ -26,7 +26,7 @@ Hand::Hand(std::vector<Card> list) : hand_(list), value_(0){
                 ace_num += 1;
             }
         }
-    }
+}
 
 std::string Hand::printHand() const{
     std::ostringstream oss;
@@ -37,9 +37,9 @@ std::string Hand::printHand() const{
 }
 
 int Hand::handValue() const{
-    int result;
-    for(const auto& card_ptr: hand_){
-        result += int(card_ptr.getCardValue());
+    int result = 0;
+    for(const auto& card: hand_){
+        result += card.getCardIntValue();
     }
     if(result > 21){
         result -= 10*ace_num;
@@ -52,7 +52,16 @@ void Hand::add_card(Card& card){
     if(card.getCardValue() == Card_Value_t::ace){
         ++ace_num;
     }
-    value_ += card.getCardIntValue();
+}
+
+void Hand::set_card(const Card& card, std::size_t pos){
+    hand_.insert(hand_.begin() + int(pos), card );
+}
+
+void Hand::clear_hand(){
+    ace_num =0;
+    hand_.clear();
+    hand_.shrink_to_fit();
 }
 
 Card& DeckOfCards::getTopCard()
@@ -96,7 +105,7 @@ int Card::getCardIntValue() const
     switch(card_.second)
     {
         case(Card_Value_t::ace): 
-            return 1;
+            return 11;
         case(Card_Value_t::two): 
             return 2;
         case(Card_Value_t::three): 
@@ -116,11 +125,11 @@ int Card::getCardIntValue() const
         case(Card_Value_t::ten): 
             return 10;
         case(Card_Value_t::jack):
-            return 2;
+            return 10;
         case(Card_Value_t::queen): 
-            return 3;
+            return 10;
         case(Card_Value_t::king): 
-            return 4;
+            return 10;
         default: 
             return 0;
     }

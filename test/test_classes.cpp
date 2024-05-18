@@ -107,11 +107,12 @@ TEST(test_game_classes_hand,  handValue_test){
     Card card1(Card_Color_t::hearts, Card_Value_t::five);
     Card card2(Card_Color_t::pikes, Card_Value_t::ten);
     Card card3(Card_Color_t::hearts, Card_Value_t::ace);
+
     Hand hand({card1, card2});
 
     ASSERT_EQ(hand.handValue(), 15);
 
-    hand.set_card(card3, 2);
+    hand.add_card(card3);
 
     EXPECT_EQ(hand.handValue(), 16);
 }
