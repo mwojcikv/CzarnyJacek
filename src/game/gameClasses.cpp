@@ -3,60 +3,54 @@
 #include <iostream>
 #include <ostream>
 
-void swapping(Card& card1, Card& card2)
-{
-    Card& temp = card1;
-    card1 = card2;
-    card1 = temp;
+
+
+
+
+constexpr Card& Card::operator=(const Card& other) {
+    if (this != &other) { // Check for self-assignment
+        card_ = other.getCard(); // Assign the card pair from the other Card object
+    }
+    return *this; // Return a reference to the modified object
 }
 
-
-//constexpr Card& Card::operator=(const Card& other) {
-//    if (this != &other) { // Check for self-assignment
-//        card_ = other.getCard(); // Assign the card pair from the other Card object
-//    }
-//    return *this; // Return a reference to the modified object
-//}
-
-Hand::Hand(std::vector<Card> list) : hand_(list){
-        for(const auto& card : list)
-        {
-            if(card.getCardValue() == Card_Value_t::ace)
-            {
-                ace_num += 1;
-            }
-        }
-}
 
 std::string Hand::printHand() const{
     std::ostringstream oss;
     for(const auto& card: hand_){
-        oss<< Card_Value_to_string( card.getCardValue())<< " of "<< Card_Color_to_string(card.getCardColor())<< "\n";
+        oss << Card_Value_to_string( card -> getCardValue())<< " of "<< Card_Color_to_string(card -> getCardColor())<< "\n";
     }
     return oss.str();
 }
 
 int Hand::handValue() const{
     int result = 0;
-    for(const auto& card: hand_){
-        result += card.getCardIntValue();
+
+    for(const auto& card_ptr: hand_){
+        result += int(card_ptr -> getCardIntValue());
+
     }
     if(result > 21){
-        result -= 10*ace_num;
+        // result -= 10*ace_num;
     }
     return result;
 }
 
-void Hand::add_card(Card& card){
-    hand_.push_back(card);
-    if(card.getCardValue() == Card_Value_t::ace){
-        ++ace_num;
+void Hand::add_card(std::unique_ptr<Card> card){
+   
+    if(card.get() -> getCardValue() == Card_Value_t::ace){
+        ace_num ++;
     }
+
+    value_ += int(card.get() -> getCardIntValue());
+    hand_.emplace_back(std::move(card));
+
 }
 
 void Hand::set_card(const Card& card, std::size_t pos){
     hand_.insert(hand_.begin() + int(pos), card );
 }
+
 
 void Hand::clear_hand(){
     ace_num =0;
@@ -64,23 +58,16 @@ void Hand::clear_hand(){
     hand_.shrink_to_fit();
 }
 
-Card& DeckOfCards::getTopCard()
+
+void DeckOfCards::getTopCard(Hand* hand)
 {
-    Card& lastCard = deck_.back();
+    hand -> add_card(std::move(deck_.back()));
     deck_.pop_back();
-    return lastCard;
+
 }
 
 void DeckOfCards::shuffleDeck(){
-    // unsigned seed = 0;
-    
-    // std::vector<Card>::iterator first = deck_.begin();
-    // std::vector<Card>::iterator last = deck_.end();
-    
-    // for (auto i=(last-first)-1; i>0; --i) {
-    //     std::uniform_int_distribution<decltype(i)> d(0,i);
-    //     swapping(first[i], first[d(std::default_random_engine(seed))]);
-    // }
+
      std::random_shuffle(deck_.begin(), deck_.end());
 
 }
@@ -93,7 +80,7 @@ DeckOfCards::DeckOfCards(std::size_t numOf52Decks)
         {
             for(const auto& v : all_values)
             {
-                deck_.push_back(Card(c,v));
+                deck_.push_back(std::make_unique<Card>(c,v));
             }
         }
     }
@@ -188,23 +175,26 @@ std::string Card_Color_to_string(const Card_Color_t& cardColor ){
 }
 
 
-void Dealer::dealInitialHand(Gamer& gamer, DeckOfCards& deck) {
+void Dealer::dealInitialHand(Gamer* gamer, DeckOfCards* deck) {
     
     for(std::size_t i = 0; i < 2; i++)
     {
-        this -> add_card(deck.getTopCard());
-        gamer.add_card(deck.getTopCard());
+        deck -> getTopCard(this);
+        deck -> getTopCard(gamer);
     }
 }
 
-void Dealer::playTurn(DeckOfCards& deck) {
+void Dealer::playTurn(DeckOfCards* deck) {
     // Krupier dobiera karty dopóki suma punktów jego ręki jest mniejsza niż 17
-    while (this -> handValue() < 17) {
-            this -> add_card(deck.getTopCard());
+    if(this -> handValue() < 17)
+    {
+            deck -> getTopCard(this);
     }
 }
 void Dealer::revealHand() const {
     // Odsłonięcie kart krupiera
     std::cout << "Dealer's hand:\n";
-    printHand();
+
+    std::cout << this -> printHand();
 }
+

@@ -1,7 +1,7 @@
 #include "gui/commandLineInterface.hpp"
 #include <iostream>
 #include <vector>
-// #include <opencv2/opencv.hpp>
+#include <SFML/Graphics.hpp>
 
 
 void interface() {
@@ -70,36 +70,29 @@ void interface() {
     }
 }
 
+std::string imagePath = "Pomiar_nadajnik.jpg";
 
-// using namespace cv;
+// void displayImage(const std::string& imagePath) {
+//     sf::RenderWindow window(sf::VideoMode(1000, 800), "Wyświetlanie karty PNG");
 
-// int wczytaj_kartę() {
-//     // Lista nazw plików z kartami
-//   // Tutaj będą dodawane karty z tali
-//     std::vector<std::string> fileNames = {"karta1.jpg", "karta2.jpg", "karta3.jpg"}; 
+//     sf::Texture cardTexture;
+//     if (!cardTexture.loadFromFile(imagePath)) {
+//         return;
+//     }
 
-//     // Przejście przez każdą kartę z tali.
-//     for (const auto& fileName : fileNames) 
-    
-//     {
-//         // Wczytanie obrazu
-//         Mat image = imread(fileName);
+//     sf::Sprite cardSprite;
+//     cardSprite.setTexture(cardTexture);
 
-//         // Sprawdzanie, czy obraz został poprawnie wczytany
-//         if (image.empty()) {
-//             std::cout << "Nie można wczytać obrazu: " << fileName << std::endl;
-//             continue;
+//     while (window.isOpen()) {
+//         sf::Event event;
+//         while (window.pollEvent(event)) {
+//             if (event.type == sf::Event::Closed) {
+//                 window.close();
+//             }
 //         }
 
-//         // Wyświetlanie karty
-//         imshow("Karta", image);
-
-//         // Poczekaj na naciśnięcie klawisza przez użytkownika
-//         waitKey(0);
+//         window.clear();
+//         window.draw(cardSprite);
+//         window.display();
 //     }
-    
-//     return 0;
 // }
-
-// kod jest narazie szkieletem orginalnej wersji ale mniej więcej na tym będzie polegała inplementacja kart i wyswietlanie je w formacie .jpg
-
