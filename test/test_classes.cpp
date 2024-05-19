@@ -127,6 +127,20 @@ TEST(test_game_classes_hand,  add_card_test){
     EXPECT_EQ(hand.get_card(2).getCardColor(), Card_Color_t::hearts);
 }
 
+TEST(test_game_classes_hand, clear_hand){
+    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+
+    Hand hand({card1, card2});
+
+    EXPECT_EQ(hand.get_card(1).getCardValue(), Card_Value_t::ten);
+
+    hand.clear_hand();
+
+    EXPECT_EQ(hand.handValue(), 0);
+
+
+}
 
 
 // //TODO dopisz test
