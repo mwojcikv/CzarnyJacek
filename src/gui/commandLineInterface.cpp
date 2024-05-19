@@ -71,7 +71,7 @@ void interface() {
     }
 }
 
-std::string imagePath = "C:\\Users\\maksi\\CLionProjects\\untitled14\\f4.png";
+//std::string imagePath = "C:\\Users\\maksi\\CLionProjects\\untitled14\\f4.png";
 
 void displayImage(const std::string& imagePath) {
     sf::RenderWindow window(sf::VideoMode(1000, 800), "Wyświetlanie karty PNG");
