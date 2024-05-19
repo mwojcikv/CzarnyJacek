@@ -55,8 +55,8 @@ class Card
         Card(Card_Color_t color = Card_Color_t::clover, Card_Value_t value = Card_Value_t::ace) : card_(color, value) {}
 
         Card(const Card&) = default;
-
-        constexpr Card& operator = (const Card&);
+        //TODO on nie działa naprawić trzeba
+//        constexpr Card& operator = (const Card&);
 
         
         Card_Color_t getCardColor() const { return card_.first; }        
@@ -124,7 +124,15 @@ public:
 
     void add_card(std::unique_ptr<Card> card); //dodawanie karty do reki
 
+    const Card get_card(std::size_t pos) const {return  hand_[pos];}
+
+    void set_card(const Card& card, std::size_t pos);
+
+    int get_ace_num() const {return ace_num;}
+
     std::size_t numOfCards() const {return hand_.size();}   // zwraca ilość kart w ręce
+
+    void clear_hand();
 
     //przeciazony operator []
     std::unique_ptr<Card> operator [](std::size_t pos) {return std::move(hand_[pos]);}
@@ -142,9 +150,11 @@ public:
 
 private:
     //konterner któy zawiera ręke gracza
+
     std::vector<std::unique_ptr<Card>> hand_;
     inline static int ace_num =0;
     int value_;
+
 
 };
 

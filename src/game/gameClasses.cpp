@@ -6,6 +6,7 @@
 
 
 
+
 constexpr Card& Card::operator=(const Card& other) {
     if (this != &other) { // Check for self-assignment
         card_ = other.getCard(); // Assign the card pair from the other Card object
@@ -24,8 +25,10 @@ std::string Hand::printHand() const{
 
 int Hand::handValue() const{
     int result = 0;
+
     for(const auto& card_ptr: hand_){
         result += int(card_ptr -> getCardIntValue());
+
     }
     if(result > 21){
         // result -= 10*ace_num;
@@ -38,10 +41,22 @@ void Hand::add_card(std::unique_ptr<Card> card){
     if(card.get() -> getCardValue() == Card_Value_t::ace){
         ace_num ++;
     }
+
     value_ += int(card.get() -> getCardIntValue());
     hand_.emplace_back(std::move(card));
+
 }
 
+void Hand::set_card(const Card& card, std::size_t pos){
+    hand_.insert(hand_.begin() + int(pos), card );
+}
+
+
+void Hand::clear_hand(){
+    ace_num =0;
+    hand_.clear();
+    hand_.shrink_to_fit();
+}
 
 
 void DeckOfCards::getTopCard(Hand* hand)
@@ -77,7 +92,7 @@ int Card::getCardIntValue() const
     switch(card_.second)
     {
         case(Card_Value_t::ace): 
-            return 1;
+            return 11;
         case(Card_Value_t::two): 
             return 2;
         case(Card_Value_t::three): 
@@ -179,5 +194,7 @@ void Dealer::playTurn(DeckOfCards* deck) {
 void Dealer::revealHand() const {
     // Odsłonięcie kart krupiera
     std::cout << "Dealer's hand:\n";
+
     std::cout << this -> printHand();
 }
+
