@@ -37,8 +37,8 @@ TEST(DeckOfCardsTest, constructor)
     DeckOfCards basic;
     Card card(Card_Color_t::clover, Card_Value_t::ace);
     EXPECT_EQ(basic.numOfCards(), 52);
-    EXPECT_EQ((*basic[0]).getCardColor(), card.getCardColor());
-    EXPECT_EQ((*basic[0]).getCardValue(), card.getCardValue());
+    EXPECT_EQ(basic[0] -> getCardColor(), card.getCardColor());
+    EXPECT_EQ(basic[0] -> getCardValue(), card.getCardValue());
 
 }
 
@@ -51,40 +51,131 @@ TEST(DeckOfCardsTest, shuffle)
     Card card(Card_Color_t::clover, Card_Value_t::ace);
     EXPECT_EQ(basic.numOfCards(), 52);
     EXPECT_EQ(basic[0] -> getCardColor(), card.getCardColor());
-    EXPECT_EQ(basic[0] -> getCardValue(), card.getCardValue());
+    EXPECT_EQ(Card_Value_to_string(basic[0] -> getCardValue()), Card_Value_to_string(card.getCardValue()));
 
     basic.shuffleDeck();
     
-    EXPECT_NE((*basic[0]).getCard(), card.getCard());
+    EXPECT_NE(basic[0] -> getCard(), card.getCard());
 
 
-    Card_Color_t color_2 = (*basic[0]).getCardColor();
-    Card_Value_t value_2 = (*basic[0]).getCardValue();
+    Card_Color_t color_2 = basic[0] -> getCardColor();
+    Card_Value_t value_2 = basic[0] -> getCardValue();
     Card card2(color_2, value_2);
 
     basic.shuffleDeck();
-    EXPECT_NE((*basic[0]).getCard(), card2.getCard());
+    EXPECT_NE(basic[0] -> getCard(), card2.getCard());
 }
 
 
-//TODO dopisz test
-TEST(test_game_classes_hand, printHand_test){
+
+TEST(HandTest, printHand) {
+    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+
+    Hand hand({card1, card2});
+    Hand hand1;
+    EXPECT_EQ(hand.printHand(), "Five of Hearts\nTen of Pikes\n");
+    EXPECT_EQ(hand1.printHand(), "");
+}
+
+TEST(test_game_classes_hand,  assigment_operator){
+    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+    Card card3(Card_Color_t::hearts, Card_Value_t::nine);
+    Hand hand({card1, card2});
+
+    hand.set_card(card3, 1);
+
+    EXPECT_EQ(hand.get_card(1).getCardColor(),Card_Color_t::hearts);
+    EXPECT_EQ(hand.get_card(1).getCardValue(), Card_Value_t::nine);
 
 }
 
-// TEST(test_game_classes_hand,  operator_[]_test){
+//TODO napraw = operator dla karty...
+//TEST(test_game_classes_hand,  equality_operator){
+//    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+//    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+//    Card card3(Card_Color_t::hearts, Card_Value_t::nine);
+//    Hand hand({card1, card2});
+//
+//    hand.get_card(1) = card3;
+//    EXPECT_EQ(hand.get_card(1).getCardColor(),Card_Color_t::hearts);
+//    EXPECT_EQ(hand.get_card(1).getCardValue(), Card_Value_t::nine);
+//}
 
-// }
+TEST(test_game_classes_hand,  handValue_test){
+    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+    Card card3(Card_Color_t::hearts, Card_Value_t::ace);
 
-// TEST(test_game_classes_hand,  operator_=_test){
+    Hand hand({card1, card2});
 
-// }
+    ASSERT_EQ(hand.handValue(), 15);
 
-// TEST(test_game_classes_hand,  handValue_test){
+    hand.add_card(card3);
 
-// }
+    EXPECT_EQ(hand.handValue(), 16);
+}
 
-// TEST(test_game_classes_hand,  add_card_test){
+TEST(test_game_classes_hand,  add_card_test){
+    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+    Card card3(Card_Color_t::hearts, Card_Value_t::nine);
+    Hand hand({card1, card2});
+    hand.add_card(card3);
+    EXPECT_EQ(hand.get_card(2).getCardValue(), Card_Value_t::nine);
+    EXPECT_EQ(hand.get_card(2).getCardColor(), Card_Color_t::hearts);
+}
+
+TEST(test_game_classes_hand, clear_hand){
+    Card card1(Card_Color_t::hearts, Card_Value_t::five);
+    Card card2(Card_Color_t::pikes, Card_Value_t::ten);
+
+    Hand hand({card1, card2});
+
+    EXPECT_EQ(hand.get_card(1).getCardValue(), Card_Value_t::ten);
+
+    hand.clear_hand();
+
+    EXPECT_EQ(hand.handValue(), 0);
 
 
-// }
+}
+
+TEST(DealerTest, dealInitialHand)
+{
+
+    deal.dealInitialHand(&gam, &deck);
+    
+    EXPECT_EQ(gam.numOfCards(), 2);
+    EXPECT_EQ(deal.numOfCards(), 2);
+    EXPECT_EQ(deck.numOfCards(), 48);
+}
+
+
+TEST(DealerTest, playTurn)
+{
+    Dealer deal;
+
+    DeckOfCards deck;
+
+    deck.shuffleDeck();
+    
+    deck.shuffleDeck();
+    deal.playTurn(&deck);
+    
+    EXPECT_EQ(deal.numOfCards(), 1);
+
+    int n_1 = 0;
+    int n = 1;
+    while(n_1 != n )
+    {
+        n_1 = n;
+        deal.playTurn(&deck);
+        n = deal.handValue(); 
+    
+    }
+
+   deal.revealHand();
+}
+
