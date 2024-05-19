@@ -124,9 +124,7 @@ public:
 
     void add_card(std::unique_ptr<Card> card); //dodawanie karty do reki
 
-    const Card get_card(std::size_t pos) const {return  hand_[pos];}
-
-    void set_card(const Card& card, std::size_t pos);
+    const Card* get_card(std::size_t pos) const {return hand_[pos].get();}
 
     int get_ace_num() const {return ace_num;}
 
