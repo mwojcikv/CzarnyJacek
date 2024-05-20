@@ -70,6 +70,20 @@ void interface() {
     }
 }
 
+void displayDeck() {
+    std::vector<std::string> suits = {"clubs", "diamonds", "hearts", "spades"};
+    std::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"};
+
+    for (const auto& suit : suits) {
+        for (const auto& rank : ranks) {
+            std::string imagePath = "C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards/" + rank + "_of_" + suit + ".png";
+            displayImage(imagePath);
+        }
+    }
+}// wstępna implementacja funkcji wyświetlającej talię kart
+
+
+
 //std::string imagePath = "C:\\Users\\maksi\\CLionProjects\\untitled14\\f4.png";
 
 // void displayImage(const std::string& imagePath) {
@@ -96,6 +110,5 @@ void interface() {
 //         window.display();
 //     }
 // }
-
 
 
