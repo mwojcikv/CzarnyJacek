@@ -1,7 +1,7 @@
 #include "gui/commandLineInterface.hpp"
 #include <iostream>
 #include <vector>
-// #include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 
 void interface() {
@@ -70,16 +70,9 @@ void interface() {
     }
 }
 
-void displayDeck() {
-    std::vector<std::string> suits = {"clubs", "diamonds", "hearts", "spades"};
-    std::vector<std::string> ranks = {"2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"};
-
-    for (const auto& suit : suits) {
-        for (const auto& rank : ranks) {
+void displayDeck(std::string suit, std::string rank) {
             std::string imagePath = "C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards/" + rank + "_of_" + suit + ".png";
             displayImage(imagePath);
-        }
-    }
 }// wstępna implementacja funkcji wyświetlającej talię kart
 
 
