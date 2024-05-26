@@ -7,14 +7,6 @@
 
 
 
-constexpr Card& Card::operator=(const Card& other) {
-    if (this != &other) { // Check for self-assignment
-        card_ = other.getCard(); // Assign the card pair from the other Card object
-    }
-    return *this; // Return a reference to the modified object
-}
-
-
 std::string Hand::printHand() const{
     std::ostringstream oss;
     for(const auto& card: hand_){
@@ -31,7 +23,7 @@ int Hand::handValue() const{
 
     }
     if(result > 21){
-        // result -= 10*ace_num;
+        result -= 10*ace_num;
     }
     return result;
 }
@@ -45,10 +37,6 @@ void Hand::add_card(std::unique_ptr<Card> card){
     value_ += int(card.get() -> getCardIntValue());
     hand_.emplace_back(std::move(card));
 
-}
-
-void Hand::set_card(const Card& card, std::size_t pos){
-    hand_.insert(hand_.begin() + int(pos), card );
 }
 
 

@@ -21,6 +21,7 @@ set(SOURCE_FILES
 set(SOURCES_FILES_TESTS
         test/test_classes.cpp
         test/test_rules.cpp
+        test/test_gui.cpp
         )
 
 include(./SetCommonConfig.cmake)

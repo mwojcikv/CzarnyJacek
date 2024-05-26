@@ -4,5 +4,5 @@
 #include <iostream>
 
 void interface();
-
+void displayDeck(std::string suit, std::string rank);
 #endif
