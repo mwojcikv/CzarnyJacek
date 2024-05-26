@@ -4,10 +4,11 @@ set(PROJECT_ID CzarnyJacek)
 project(CzarnyJacek)
 
 
- include(FetchContent)
- set(BUILD_SHARED_LIBS OFF)
- FetchContent_Declare(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.5.1)
- FetchContent_MakeAvailable(SFML)
+include(FetchContent)
+set(BUILD_SHARED_LIBS OFF)
+FetchContent_Declare(SFML GIT_REPOSITORY https://github.com/SFML/SFML.git GIT_TAG 2.5.1)
+FetchContent_MakeAvailable(SFML)
+
 
 
 include_directories(include)
@@ -26,6 +27,7 @@ set(SOURCES_FILES_TESTS
 
 include(./SetCommonConfig.cmake)
 
- add_executable(CzarnyJacek main.cpp)
+add_executable(CzarnyJacek main.cpp)
 
- target_link_libraries(CzarnyJacek sfml-graphics)
+target_link_libraries(CzarnyJacek sfml-graphics)
+
