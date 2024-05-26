@@ -74,7 +74,7 @@ TEST(HandTest, printHand) {
     hand.add_card(std::make_unique<Card>(Card_Color_t::pikes, Card_Value_t::ten));
 
     Hand hand1;
-    EXPECT_EQ(hand.printHand(), "Five of Hearts\nTen of Pikes\n");
+    EXPECT_EQ(hand.printHand(), "5_of_hearts.png\n10_of_spades.png\n");
     EXPECT_EQ(hand1.printHand(), "");
 }
 
@@ -166,3 +166,18 @@ TEST(DealerTest, playTurn)
    deal.revealHand();
 }
 
+TEST(test_game_classes_deck, shuffle_deck){
+    DeckOfCards deckOfCards;
+    //UWAGA TODO test czasami się nie wychodzi bo karta moze się przetasować na dokładnie taką samą
+    Card* card_ptr_1 = deckOfCards.get_Card(0);
+    Card* card_ptr_2 = deckOfCards.get_Card(1);
+    Card* card_ptr_3 = deckOfCards.get_Card(2);
+
+    deckOfCards.shuffleDeck();
+    Card* card_ptr_4 = deckOfCards.get_Card(0);
+    Card* card_ptr_5 = deckOfCards.get_Card(1);
+    Card* card_ptr_6 = deckOfCards.get_Card(2);
+    EXPECT_NE(card_ptr_4->getCardIntValue(), card_ptr_1->getCardIntValue());
+    EXPECT_NE(card_ptr_5->getCardIntValue(), card_ptr_2->getCardIntValue());
+    EXPECT_NE(card_ptr_6->getCardIntValue(), card_ptr_3->getCardIntValue());
+}

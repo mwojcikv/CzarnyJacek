@@ -89,6 +89,8 @@ class DeckOfCards
 
     void shuffleDeck();
 
+    Card* get_Card(std::size_t pos) const {return deck_[pos].get();}
+
     std::vector<std::unique_ptr<Card>>::iterator begin() {return deck_.begin();}
     std::vector<std::unique_ptr<Card>>::const_iterator begin() const {return deck_.cbegin();}
     std::vector<std::unique_ptr<Card>>::const_iterator cbegin() const {return deck_.cbegin();}
@@ -192,6 +194,9 @@ class Dealer : public Hand
         ~Dealer() = default; 
 
 };
+
+
+std::string cardToString(Card* card_ptr );
 
 std::string Card_Value_to_string(const Card_Value_t& cardValue );
 

@@ -10,4 +10,5 @@
 
 //na ten moment biblioteka sfml nie działa poprawnie w tym pliku
 
+
 #endif

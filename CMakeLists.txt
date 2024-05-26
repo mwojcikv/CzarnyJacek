@@ -34,3 +34,4 @@ add_executable(CzarnyJacek main.cpp ${SOURCE_FILES})
 
 
 target_link_libraries(CzarnyJacek PRIVATE sfml-graphics sfml-window sfml-system)
+
