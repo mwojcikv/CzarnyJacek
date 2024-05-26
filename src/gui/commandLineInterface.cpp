@@ -13,6 +13,8 @@ enum MenuState {
     RULES_MENU
 };
 
+//ta funkcja jest do przekonwertowania
+
 void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& text) {
     window.draw(button);
     window.draw(text);
