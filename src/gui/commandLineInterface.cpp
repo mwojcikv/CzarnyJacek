@@ -1,7 +1,3 @@
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+#include "gui/commandLineInterface.hpp"
 
-int main() {
-    createMenuWindow();
-    return 0;
-}
+

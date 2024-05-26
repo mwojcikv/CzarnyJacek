@@ -4,10 +4,11 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
-#include <SFML/System.hpp">
+#include <SFML/System.hpp>
 #include <iostream>
 #include <string>
 
-void interface();
-void displayDeck(std::string suit, std::string rank);
+//na ten moment biblioteka sfml nie działa poprawnie w tym pliku
+
+
 #endif
