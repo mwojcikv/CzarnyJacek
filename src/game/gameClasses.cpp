@@ -14,9 +14,9 @@ std::string Hand::printHand() const{
     return oss.str();
 }
 
-std::string cardToString(Card* card_ptr) {
+std::string cardToString(const Card* card) {
     std::ostringstream oss;
-    oss << Card_Value_to_string( card_ptr -> getCardValue())<< "_of_"<< Card_Color_to_string(card_ptr -> getCardColor())<<".png" << "\n";
+    oss << Card_Value_to_string( card->getCardValue())<< "_of_"<< Card_Color_to_string(card->getCardColor())<<".png" << "\n";
     return oss.str();
 }
 
@@ -169,7 +169,10 @@ std::string Card_Color_to_string(const Card_Color_t& cardColor ){
     }
 }
 
+void takeCard(Hand& playerHand, Hand& GamerHand){
 
+
+}
 
 void Dealer::dealInitialHand(Gamer* gamer, DeckOfCards* deck) {
     

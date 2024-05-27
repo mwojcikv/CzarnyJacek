@@ -196,7 +196,7 @@ class Dealer : public Hand
 };
 
 
-std::string cardToString(Card* card_ptr );
+std::string cardToString(const Card* card_ptr );
 
 std::string Card_Value_to_string(const Card_Value_t& cardValue );
 
