@@ -54,7 +54,7 @@ std::string getCardImagePath(const Card* card) {
 }
 
 // Function to draw a hand of cards
-void drawHand(sf::RenderWindow& window, const Hand hand, float yPosition) {
+void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition) {
     float xPosition = 250;
     for (const auto& card_u_ptr : hand) {
         sf::Sprite cardSprite = createCardSprite(getCardImagePath(card_u_ptr.get()));
@@ -172,9 +172,8 @@ void createMenuWindow() {
                             switch (i) {
                                 case 0:  // Hit
                                     if (isPlayerTurn && !isGameOver) {
-                                        playerHand.push_back(deck.back());
-                                        deck.pop_back();
-                                        if (calculateHandValue(playerHand) > 21) {
+                                        deck.getTopCard(&playerHand);
+                                        if (playerHand.handValue() > 21) {
                                             isGameOver = true;
                                             gameResult = "Player busts! Dealer wins.";
                                         }
@@ -183,12 +182,11 @@ void createMenuWindow() {
                                 case 1:  // Stand
                                     if (isPlayerTurn && !isGameOver) {
                                         isPlayerTurn = false;
-                                        while (calculateHandValue(dealerHand) < 17) {
-                                            dealerHand.push_back(deck.back());
-                                            deck.pop_back();
+                                        while (playerHand.handValue() < 17) {
+                                            deck.getTopCard(&playerHand);
                                         }
-                                        int playerValue = calculateHandValue(playerHand);
-                                        int dealerValue = calculateHandValue(dealerHand);
+                                        int playerValue = playerHand.handValue();
+                                        int dealerValue = dealerHand.handValue();
                                         if (dealerValue > 21 || playerValue > dealerValue) {
                                             gameResult = "Player wins!";
                                         } else if (playerValue < dealerValue) {
