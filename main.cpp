@@ -54,13 +54,25 @@ std::string getCardImagePath(const Card* card) {
 }
 
 // Function to draw a hand of cards
-void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition) {
+void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const sf::Font& font) {
     float xPosition = 250;
     for (const auto& card_u_ptr : hand) {
         sf::Sprite cardSprite = createCardSprite(getCardImagePath(card_u_ptr.get()));
         cardSprite.setPosition(xPosition, yPosition);
         window.draw(cardSprite);
         xPosition += 40;  // Adjust spacing between cards to fit more cards
+    }
+    // Create text object to display hand value
+    if(hand.isDealer() == 0){
+        sf::Text handValueText;
+        handValueText.setFont(font);
+        handValueText.setString("Hand Value: " + std::to_string(hand.handValue()));
+        handValueText.setCharacterSize(20);
+        handValueText.setFillColor(sf::Color::Black);
+        handValueText.setPosition(50, 350 );
+
+        // Draw the hand value text
+        window.draw(handValueText);
     }
 }
 
@@ -225,8 +237,8 @@ void createMenuWindow() {
             gameTitle.setPosition(250, 20);
             window.draw(gameTitle);
 
-            drawHand(window, playerHand, 350);  // Draw player's hand at the bottom
-            drawHand(window, dealerHand, 100);  // Draw dealer's hand at the top
+            drawHand(window, playerHand, 350, font);  // Draw player's hand at the bottom
+            drawHand(window, dealerHand, 100, font);  // Draw dealer's hand at the top
 
             // Draw the game buttons
             sf::RectangleShape gameButtons[3];
