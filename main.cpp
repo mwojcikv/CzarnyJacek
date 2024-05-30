@@ -60,7 +60,7 @@ void createMenuWindow() {
 
     sf::RectangleShape buttons[6];
     sf::Text buttonTexts[6];
-    std::string buttonLabels[] = {"Rozgrywka z botami", "Rozgrywka multiplayer", "Sklep", "Ekskluzywna zawartosc", "Zasady gry", "Wyjscie"};
+    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Exclusive content", "Game rules", "Exit game"};
 
     for (int i = 0; i < 6; ++i) {
         buttons[i].setSize(sf::Vector2f(300, 50));
@@ -90,23 +90,23 @@ void createMenuWindow() {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
-                                    std::cout << "Rozgrywka" << std::endl;
+                                    std::cout << "Gameplay" << std::endl;
                                     currentState = GAME;
                                     break;
                                 case 1:
-                                    std::cout << "Rozgrywka multiplayer selected" << std::endl;
+                                    std::cout << "Multiplayer game selected" << std::endl;
                                     currentState = MULTIPLAYER_MENU;
                                     break;
                                 case 2:
-                                    std::cout << "Sklep selected" << std::endl;
+                                    std::cout << "In-game store selected" << std::endl;
                                     currentState = SHOP_MENU;
                                     break;
                                 case 3:
-                                    std::cout << "Ekskluzywna zawartosc selected" << std::endl;
+                                    std::cout << "Exclusive content selected" << std::endl;
                                     currentState = EXCLUSIVE_CONTENT_MENU;
                                     break;
                                 case 4:
-                                    std::cout << "Zasady gry selected" << std::endl;
+                                    std::cout << "Game rules selected" << std::endl;
                                     currentState = RULES_MENU;
                                     break;
                                 case 5:
@@ -127,12 +127,12 @@ void createMenuWindow() {
                         if (botButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                             switch (i) {
                                 case 0:
-                                    std::cout << "Rozpocznij gre selected" << std::endl;
+                                    std::cout << "Start game selected" << std::endl;
                                     displayCard = true;
                                     // Implement game start logic
                                     break;
                                 case 1:
-                                    std::cout << "Wybierz poziom trudnosci selected" << std::endl;
+                                    std::cout << "Choose difficulty level selected" << std::endl;
                                     // Implement difficulty selection logic
                                     break;
                                 case 2:
@@ -153,14 +153,14 @@ void createMenuWindow() {
                 drawButton(window, buttons[i], buttonTexts[i]);
             }
         } else if (currentState == GAME) {
-            sf::Text botsTitle("Rozgrywka", font, 24);
+            sf::Text botsTitle("Gameplay", font, 24);
             botsTitle.setFillColor(sf::Color::Black);
             botsTitle.setPosition(250, 20);
             window.draw(botsTitle);
 
             sf::RectangleShape botButtons[3];
             sf::Text botButtonTexts[3];
-            std::string botButtonLabels[] = {"Rozpocznij gre", "Wybierz poziom trudnosci", "Wroc do menu"};
+            std::string botButtonLabels[] = {"Start game", "Choose difficulty level", "Back to main menu"};
 
             for (int i = 0; i < 3; ++i) {
                 botButtons[i].setSize(sf::Vector2f(300, 50));
@@ -183,12 +183,12 @@ void createMenuWindow() {
                 if (botButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                     switch (i) {
                         case 0:
-                            std::cout << "Rozpocznij gre selected" << std::endl;
+                            std::cout << "Start game selected" << std::endl;
                             displayCard = true;
                             // Implement game start logic
                             break;
                         case 1:
-                            std::cout << "Wybierz poziom trudnosci selected" << std::endl;
+                            std::cout << "Choose difficulty level selected" << std::endl;
                             // Implement difficulty selection logic
                             break;
                         case 2:
