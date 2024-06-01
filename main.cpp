@@ -5,9 +5,6 @@
 #include <SFML/Window.hpp>
 #include <SFML/System.hpp>
 
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/System.hpp>
 #include <iostream>
 #include <string>
 #include <vector>
@@ -55,12 +52,14 @@ std::string getCardImagePath(const Card* card) {
 
 // Function to draw a hand of cards
 void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const sf::Font& font) {
+    std::vector<sf::Sprite> spriteCollection;
     float xPosition = 250;
     for (const auto& card_u_ptr : hand) {
         sf::Sprite cardSprite = createCardSprite(getCardImagePath(card_u_ptr.get()));
         cardSprite.setPosition(xPosition, yPosition);
         window.draw(cardSprite);
         xPosition += 40;  // Adjust spacing between cards to fit more cards
+
     }
     // Create text object to display hand value
     if(hand.isDealer() == 0){
@@ -74,6 +73,14 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
         // Draw the hand value text
         window.draw(handValueText);
     }
+}
+
+sf::Sprite drawReverse(sf::RenderWindow& window,float xPosition, float yPosition) {
+    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
+    cardSprite.setPosition(xPosition, yPosition);
+    window.draw(cardSprite);
+
+    return cardSprite;
 }
 
 // Function to create the menu window
@@ -117,6 +124,7 @@ void createMenuWindow() {
     bool isPlayerTurn = true;
     bool isGameOver = false;
     std::string gameResult;
+    sf::Sprite dealerReverse = drawReverse(window,290 ,100);
 
     while (window.isOpen()) {
         sf::Event event;
@@ -166,7 +174,6 @@ void createMenuWindow() {
                     sf::RectangleShape gameButtons[3];
                     sf::Text gameButtonTexts[3];
                     std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
-
                     for (int i = 0; i < 3; ++i) {
                         gameButtons[i].setSize(sf::Vector2f(150, 50));
                         gameButtons[i].setFillColor(sf::Color::White);
@@ -194,19 +201,19 @@ void createMenuWindow() {
                                 case 1:  // Stand
                                     if (isPlayerTurn && !isGameOver) {
                                         isPlayerTurn = false;
-                                        while (playerHand.handValue() < 17) {
-                                            deck.getTopCard(&playerHand);
+                                        dealerReverse.setColor(sf::Color(255, 255, 255, 0));
+                                        while (dealerHand.handValue() < 17 ){
+                                            deck.getTopCard(&dealerHand);
                                         }
                                         int playerValue = playerHand.handValue();
                                         int dealerValue = dealerHand.handValue();
-                                        if (dealerValue > 21 || playerValue > dealerValue) {
+                                        if (dealerValue > 21 ) {
                                             gameResult = "Player wins!";
                                         } else if (playerValue < dealerValue) {
                                             gameResult = "Dealer wins!";
-                                        } else {
-                                            gameResult = "Push!";
-                                        }
+
                                         isGameOver = true;
+                                        }
                                     }
                                     break;
                                 case 2:  // Back to menu
@@ -239,6 +246,7 @@ void createMenuWindow() {
 
             drawHand(window, playerHand, 350, font);  // Draw player's hand at the bottom
             drawHand(window, dealerHand, 100, font);  // Draw dealer's hand at the top
+            window.draw(dealerReverse);
 
             // Draw the game buttons
             sf::RectangleShape gameButtons[3];

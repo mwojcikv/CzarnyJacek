@@ -10,6 +10,9 @@
 #include <memory>
 #include<cstdlib>
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 
 enum class Card_Color_t
 {
