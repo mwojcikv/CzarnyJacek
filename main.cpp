@@ -18,7 +18,7 @@ void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& 
     window.draw(button);
     window.draw(text);
 }
-
+//dodanie resetu stołu
 void displayImageInWindow(sf::RenderWindow& window, const std::string& imagePath, const sf::Vector2f& position, const sf::Vector2f& size) {
     sf::Texture cardTexture;
     if (!cardTexture.loadFromFile(imagePath)) {
