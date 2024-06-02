@@ -101,7 +101,7 @@ void createMenuWindow() {
 
     sf::RectangleShape buttons[6];
     sf::Text buttonTexts[6];
-    std::string buttonLabels[] = {"Rozgrywka z botami", "Rozgrywka multiplayer", "Sklep", "Ekskluzywna zawartosc", "Zasady gry", "Wyjscie"};
+    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Exclusive content", "Game rules", "Exit game"};
 
     for (int i = 0; i < 6; ++i) {
         buttons[i].setSize(sf::Vector2f(300, 50));
@@ -140,7 +140,7 @@ void createMenuWindow() {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
-                                    std::cout << "Rozgrywka z botami selected" << std::endl;
+                                    std::cout << "Gameplay" << std::endl;
                                     currentState = BLACKJACK_GAME;
                                     deck.shuffleDeck();
                                     dealerHand.dealInitialHand(&playerHand, &deck);
@@ -149,19 +149,19 @@ void createMenuWindow() {
                                     gameResult = "";
                                     break;
                                 case 1:
-                                    std::cout << "Rozgrywka multiplayer selected" << std::endl;
+                                    std::cout << "Multiplayer game selected" << std::endl;
                                     currentState = MULTIPLAYER_MENU;
                                     break;
                                 case 2:
-                                    std::cout << "Sklep selected" << std::endl;
+                                    std::cout << "In-game store selected" << std::endl;
                                     currentState = SHOP_MENU;
                                     break;
                                 case 3:
-                                    std::cout << "Ekskluzywna zawartosc selected" << std::endl;
+                                    std::cout << "Exclusive content selected" << std::endl;
                                     currentState = EXCLUSIVE_CONTENT_MENU;
                                     break;
                                 case 4:
-                                    std::cout << "Zasady gry selected" << std::endl;
+                                    std::cout << "Game rules selected" << std::endl;
                                     currentState = RULES_MENU;
                                     break;
                                 case 5:
@@ -238,6 +238,7 @@ void createMenuWindow() {
             for (int i = 0; i < 6; ++i) {
                 drawButton(window, buttons[i], buttonTexts[i]);
             }
+
         } else if (currentState == BLACKJACK_GAME) {
             sf::Text gameTitle("Blackjack", font, 24);
             gameTitle.setFillColor(sf::Color::Black);
@@ -266,6 +267,24 @@ void createMenuWindow() {
             }
 
             for (int i = 0; i < 3; ++i) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+                sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
+                if (botButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    switch (i) {
+                        case 0:
+                            std::cout << "Start game selected" << std::endl;
+                            displayCard = true;
+                            // Implement game start logic
+                            break;
+                        case 1:
+                            std::cout << "Choose difficulty level selected" << std::endl;
+                            // Implement difficulty selection logic
+                            break;
+                        case 2:
+                            currentState = MAIN_MENU;
+                            break;
+                    }
+                }
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
             }
 
