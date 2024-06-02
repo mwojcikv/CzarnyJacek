@@ -47,7 +47,7 @@ sf::Sprite createCardSprite(const std::string& imagePath) {
 
 // Function to get the path to a card image
 std::string getCardImagePath(const Card* card) {
-    return "C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards/" + cardToString(card);
+    return "C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards/" + cardToString(card);
 }
 
 // Function to draw a hand of cards
@@ -76,7 +76,7 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
 }
 
 sf::Sprite drawReverse(sf::RenderWindow& window,float xPosition, float yPosition) {
-    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
+    sf::Sprite cardSprite = createCardSprite("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
     cardSprite.setPosition(xPosition, yPosition);
     window.draw(cardSprite);
 
@@ -90,7 +90,7 @@ void createMenuWindow() {
     sf::Color backgroundColor = sf::Color::Green;
 
     sf::Font font;
-    if (!font.loadFromFile("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/arial.ttf")) {
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf")) {
         std::cerr << "Failed to load font \"arial.ttf\"" << std::endl;
         return;
     }
@@ -217,6 +217,8 @@ void createMenuWindow() {
                                     }
                                     break;
                                 case 2:  // Back to menu
+                                    playerHand.clear_hand();
+                                    dealerHand.clear_hand();
                                     currentState = MAIN_MENU;
                                     break;
                             }
