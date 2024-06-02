@@ -22,26 +22,19 @@ enum MenuState {
     BLACKJACK_GAME
 };
 
-// Card struct to represent a card in the deck
-
 
 // Function to draw a button
 void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& text) {
     window.draw(button);
     window.draw(text);
 }
-<<<<<<< HEAD
-//dodanie resetu stołu
-void displayImageInWindow(sf::RenderWindow& window, const std::string& imagePath, const sf::Vector2f& position, const sf::Vector2f& size) {
-    sf::Texture cardTexture;
-    if (!cardTexture.loadFromFile(imagePath)) {
-=======
+
 
 // Function to display a card image in the window
 sf::Sprite createCardSprite(const std::string& imagePath) {
     sf::Texture* cardTexture = new sf::Texture();
     if (!cardTexture->loadFromFile(imagePath)) {
->>>>>>> 4fb6efdb82f0c46fefd07a286a5975042029439a
+
         std::cerr << "Failed to load image: " << imagePath << std::endl;
         return sf::Sprite();
     }
@@ -274,24 +267,6 @@ void createMenuWindow() {
             }
 
             for (int i = 0; i < 3; ++i) {
-                sf::Vector2i mousePos = sf::Mouse::getPosition(window);
-                sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
-                if (botButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-                    switch (i) {
-                        case 0:
-                            std::cout << "Start game selected" << std::endl;
-                            displayCard = true;
-                            // Implement game start logic
-                            break;
-                        case 1:
-                            std::cout << "Choose difficulty level selected" << std::endl;
-                            // Implement difficulty selection logic
-                            break;
-                        case 2:
-                            currentState = MAIN_MENU;
-                            break;
-                    }
-                }
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
             }
 
