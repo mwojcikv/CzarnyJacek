@@ -30,11 +30,18 @@ void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& 
     window.draw(button);
     window.draw(text);
 }
+<<<<<<< HEAD
+//dodanie resetu stołu
+void displayImageInWindow(sf::RenderWindow& window, const std::string& imagePath, const sf::Vector2f& position, const sf::Vector2f& size) {
+    sf::Texture cardTexture;
+    if (!cardTexture.loadFromFile(imagePath)) {
+=======
 
 // Function to display a card image in the window
 sf::Sprite createCardSprite(const std::string& imagePath) {
     sf::Texture* cardTexture = new sf::Texture();
     if (!cardTexture->loadFromFile(imagePath)) {
+>>>>>>> 4fb6efdb82f0c46fefd07a286a5975042029439a
         std::cerr << "Failed to load image: " << imagePath << std::endl;
         return sf::Sprite();
     }
