@@ -135,7 +135,7 @@ void createMenuWindow() {
                 sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
                 if (currentState == MAIN_MENU) {
-                    for (int i = 0; i < 4; ++i) {
+                    for (int i = 0; i < 5; ++i) {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
