@@ -17,7 +17,6 @@ enum MenuState {
     BOTS_MENU,
     MULTIPLAYER_MENU,
     SHOP_MENU,
-    EXCLUSIVE_CONTENT_MENU,
     RULES_MENU,
     BLACKJACK_GAME
 };
@@ -101,9 +100,9 @@ void createMenuWindow() {
 
     sf::RectangleShape buttons[6];
     sf::Text buttonTexts[6];
-    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Exclusive content", "Game rules", "Exit game"};
+    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Game rules", "Exit game"};
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 5; ++i) {
         buttons[i].setSize(sf::Vector2f(300, 50));
         buttons[i].setFillColor(sf::Color::White);
         buttons[i].setPosition(250, float(100 + i * 70));
@@ -136,7 +135,7 @@ void createMenuWindow() {
                 sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
                 if (currentState == MAIN_MENU) {
-                    for (int i = 0; i < 6; ++i) {
+                    for (int i = 0; i < 4; ++i) {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
@@ -157,14 +156,10 @@ void createMenuWindow() {
                                     currentState = SHOP_MENU;
                                     break;
                                 case 3:
-                                    std::cout << "Exclusive content selected" << std::endl;
-                                    currentState = EXCLUSIVE_CONTENT_MENU;
-                                    break;
-                                case 4:
                                     std::cout << "Game rules selected" << std::endl;
                                     currentState = RULES_MENU;
                                     break;
-                                case 5:
+                                case 4:
                                     window.close();
                                     break;
                             }
@@ -235,7 +230,7 @@ void createMenuWindow() {
 
         if (currentState == MAIN_MENU) {
             window.draw(title);
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 5; ++i) {
                 drawButton(window, buttons[i], buttonTexts[i]);
             }
 
