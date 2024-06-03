@@ -142,6 +142,7 @@ void createMenuWindow() {
                                 case 0:
                                     std::cout << "Gameplay" << std::endl;
                                     currentState = BLACKJACK_GAME;
+                                    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
                                     deck.shuffleDeck();
                                     dealerHand.dealInitialHand(&playerHand, &deck);
                                     isPlayerTurn = true;
