@@ -147,6 +147,7 @@ void createMenuWindow() {
                                     isPlayerTurn = true;
                                     isGameOver = false;
                                     gameResult = "";
+
                                     break;
                                 case 1:
                                     std::cout << "Multiplayer game selected" << std::endl;
@@ -217,6 +218,8 @@ void createMenuWindow() {
                                     }
                                     break;
                                 case 2:  // Back to menu
+                                    playerHand.clear_hand();
+                                    dealerHand.clear_hand();
                                     currentState = MAIN_MENU;
                                     break;
                             }
