@@ -10,6 +10,9 @@
 #include <memory>
 #include<cstdlib>
 #include <iostream>
+#include <SFML/Graphics.hpp>
+#include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 
 enum class Card_Color_t
 {
@@ -89,6 +92,8 @@ class DeckOfCards
 
     void shuffleDeck();
 
+    Card* get_Card(std::size_t pos) const {return deck_[pos].get();}
+
     std::vector<std::unique_ptr<Card>>::iterator begin() {return deck_.begin();}
     std::vector<std::unique_ptr<Card>>::const_iterator begin() const {return deck_.cbegin();}
     std::vector<std::unique_ptr<Card>>::const_iterator cbegin() const {return deck_.cbegin();}
@@ -132,6 +137,8 @@ public:
 
     void clear_hand();
 
+    virtual int isDealer() const{return 0;};
+
     //przeciazony operator []
     std::unique_ptr<Card> operator [](std::size_t pos) {return std::move(hand_[pos]);}
 
@@ -165,7 +172,7 @@ class Gamer : public Hand
        
         void takeCard(Hand& playerHand, Hand& GamerHand); // pociągnij kartę
         void passGame() const; // poddaj się
-
+        int isDealer() const override {return 0;}
         ~Gamer() = default; 
     private: 
 
@@ -188,10 +195,13 @@ class Dealer : public Hand
         bool isGameWon(int gamerValue) { return (21 >= handValue() && handValue()> gamerValue) || (gamerValue > 21 && handValue()<= 21);}
 
         bool isDraw(int gamerValue) { return (handValue() == gamerValue);}
-
+        int isDealer() const override {return 1;}
         ~Dealer() = default; 
 
 };
+
+
+std::string cardToString(const Card* card_ptr );
 
 std::string Card_Value_to_string(const Card_Value_t& cardValue );
 

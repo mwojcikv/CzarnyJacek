@@ -2,16 +2,21 @@
 #include <sstream>
 #include <iostream>
 #include <ostream>
-
-
-
-
+#include <chrono>
+#include <random>
+#include <algorithm>
 
 std::string Hand::printHand() const{
     std::ostringstream oss;
     for(const auto& card: hand_){
-        oss << Card_Value_to_string( card -> getCardValue())<< " of "<< Card_Color_to_string(card -> getCardColor())<< "\n";
+        oss << Card_Value_to_string( card -> getCardValue())<< "_of_"<< Card_Color_to_string(card -> getCardColor())<<".png";
     }
+    return oss.str();
+}
+
+std::string cardToString(const Card* card) {
+    std::ostringstream oss;
+    oss << Card_Value_to_string( card->getCardValue())<< "_of_"<< Card_Color_to_string(card->getCardColor())<<".png";
     return oss.str();
 }
 
@@ -54,10 +59,11 @@ void DeckOfCards::getTopCard(Hand* hand)
 
 }
 
-void DeckOfCards::shuffleDeck(){
-
-     std::random_shuffle(deck_.begin(), deck_.end());
-
+void DeckOfCards::shuffleDeck()
+{
+    // Obtain a time-based seed
+    unsigned seed = unsigned (std::chrono::system_clock::now().time_since_epoch().count());
+    std::shuffle(deck_.begin(), deck_.end(), std::default_random_engine(seed));
 }
 
 DeckOfCards::DeckOfCards(std::size_t numOf52Decks)
@@ -117,31 +123,31 @@ std::string Card_Value_to_string(const Card_Value_t& cardValue )
     switch(cardValue) 
     {
         case Card_Value_t::ace:
-            return "Ace";
+            return "14";
         case Card_Value_t::two:
-            return "Two";
+            return "2";
         case Card_Value_t::three:
-            return "Three";
+            return "3";
         case Card_Value_t::four:
-            return "Four";
+            return "4";
         case Card_Value_t::five:
-            return "Five";
+            return "5";
         case Card_Value_t::six:
-            return "Six";
+            return "6";
         case Card_Value_t::seven:
-            return "Seven";
+            return "7";
         case Card_Value_t::eight:
-            return "Eight";
+            return "8";
         case Card_Value_t::nine:
-            return "Nine";
+            return "9";
         case Card_Value_t::ten:
-            return "Ten";
+            return "10";
         case Card_Value_t::jack:
-            return "Jack";
+            return "11";
         case Card_Value_t::queen:
-            return "Queen";
+            return "12";
         case Card_Value_t::king:
-            return "King";
+            return "13";
         default:
             return "Unknown";
     }
@@ -150,15 +156,15 @@ std::string Card_Value_to_string(const Card_Value_t& cardValue )
 std::string Card_Color_to_string(const Card_Color_t& cardColor ){
     switch (cardColor) {
         case Card_Color_t::pikes:
-            return "Pikes";
+            return "spades";
         case Card_Color_t::hearts:
-            return "Hearts";
+            return "hearts";
         case Card_Color_t::diamonds:
-            return "Diamonds";
+            return "diamonds";
         case Card_Color_t::clover:
-            return "Clover";
+            return "clubs";
         default:
-            return "Error";
+            return "error";
     }
 }
 
