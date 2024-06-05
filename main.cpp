@@ -189,6 +189,7 @@ void createMenuWindow() {
                 } else if (currentState == BLACKJACK_GAME) {
                     sf::RectangleShape gameButtons[3];
                     sf::Text gameButtonTexts[3];
+
                     drawHitStandBack(gameButtons, gameButtonTexts, font);
 
                     for (int i = 0; i < 3; ++i) {
@@ -207,18 +208,27 @@ void createMenuWindow() {
                                     if (isPlayerTurn && !isGameOver) {
                                         isPlayerTurn = false;
                                         dealerReverse.setColor(sf::Color(255, 255, 255, 0));
-                                        while (dealerHand.handValue() < 17 ){
+                                        int playerValue = playerHand.handValue();
+
+                                        if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
+                                            gameResult = "Black Jack!";
+                                            isGameOver = true;
+                                            break;
+                                        }
+                                        std::cout << dealerHand.handValue()<< "\n";
+                                        while (dealerHand.handValue() < 17 ) {
                                             deck.getTopCard(&dealerHand);
                                         }
-                                        int playerValue = playerHand.handValue();
-                                        int dealerValue = dealerHand.handValue();
-                                        if (dealerValue > 21 ) {
-                                            gameResult = "Player wins!";
-                                        } else if (playerValue < dealerValue) {
-                                            gameResult = "Dealer wins!";
+                                        std::cout << dealerHand.handValue()<< "\n";
 
-                                        isGameOver = true;
+                                        if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
+                                            gameResult = "Player wins!";
+                                        } else if (playerValue < dealerHand.handValue()) {
+                                            gameResult = "Dealer wins!";
+                                        }else if(playerValue == dealerHand.handValue()) {
+                                            gameResult = "Draw!";
                                         }
+                                        isGameOver = true;
                                     }
                                     break;
                                 case 2:  // Back to menu
@@ -226,6 +236,11 @@ void createMenuWindow() {
                                     dealerHand.clear_hand();
                                     currentState = MAIN_MENU;
                                     break;
+                                default:
+                                    isPlayerTurn = false;
+                                    isGameOver = true;
+                                    gameResult = "Player wins!";
+
                             }
                         }
                     }
