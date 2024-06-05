@@ -29,6 +29,21 @@ void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& 
     window.draw(text);
 }
 
+void drawHitStandBack(sf::RectangleShape gameButtons[3], sf::Text gameButtonTexts[3], const sf::Font& font  ){
+    std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
+    for(int i = 0; i < 3; ++i) {
+        gameButtons[i].setSize(sf::Vector2f(150, 50));
+        gameButtons[i].setFillColor(sf::Color::White);
+        gameButtons[i].setPosition(575, float(300 + 80 * i));
+
+        gameButtonTexts[i].setFont(font);
+        gameButtonTexts[i].setString(gameButtonLabels[i]);
+        gameButtonTexts[i].setCharacterSize(20);
+        gameButtonTexts[i].setFillColor(sf::Color::Black);
+        gameButtonTexts[i].setPosition(575 + 20, float(310 + 80 * i));
+    }
+}
+
 
 // Function to display a card image in the window
 sf::Sprite createCardSprite(const std::string& imagePath) {
@@ -174,18 +189,7 @@ void createMenuWindow() {
                 } else if (currentState == BLACKJACK_GAME) {
                     sf::RectangleShape gameButtons[3];
                     sf::Text gameButtonTexts[3];
-                    std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
-                    for (int i = 0; i < 3; ++i) {
-                        gameButtons[i].setSize(sf::Vector2f(150, 50));
-                        gameButtons[i].setFillColor(sf::Color::White);
-                        gameButtons[i].setPosition(float(50 + i * 170), 500);
-
-                        gameButtonTexts[i].setFont(font);
-                        gameButtonTexts[i].setString(gameButtonLabels[i]);
-                        gameButtonTexts[i].setCharacterSize(20);
-                        gameButtonTexts[i].setFillColor(sf::Color::Black);
-                        gameButtonTexts[i].setPosition(float(70 + i * 170), 510);
-                    }
+                    drawHitStandBack(gameButtons, gameButtonTexts, font);
 
                     for (int i = 0; i < 3; ++i) {
                         if (gameButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -255,19 +259,8 @@ void createMenuWindow() {
             // Draw the game buttons
             sf::RectangleShape gameButtons[3];
             sf::Text gameButtonTexts[3];
-            std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
 
-            for (int i = 0; i < 3; ++i) {
-                gameButtons[i].setSize(sf::Vector2f(150, 50));
-                gameButtons[i].setFillColor(sf::Color::White);
-                gameButtons[i].setPosition(float(50 + i * 170), 500);
-
-                gameButtonTexts[i].setFont(font);
-                gameButtonTexts[i].setString(gameButtonLabels[i]);
-                gameButtonTexts[i].setCharacterSize(20);
-                gameButtonTexts[i].setFillColor(sf::Color::Black);
-                gameButtonTexts[i].setPosition(float(70 + i * 170), 510);
-            }
+            drawHitStandBack(gameButtons, gameButtonTexts, font);
 
             for (int i = 0; i < 3; ++i) {
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
