@@ -262,7 +262,7 @@ void createMenuWindow() {
                                         int playerValue = playerHand.handValue();
 
                                         if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
-                                            gameResult = "Black Jack!";
+                                            showEndMessage(window, "Black Jack!");
                                             isGameOver = true;
                                             break;
                                         }
@@ -273,11 +273,11 @@ void createMenuWindow() {
                                         std::cout << dealerHand.handValue()<< "\n";
 
                                         if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
-                                            gameResult = "Player wins!";
+                                            showEndMessage(window, "Player wins!");
                                         } else if (playerValue < dealerHand.handValue()) {
-                                            gameResult = "Dealer wins!";
+                                            showEndMessage(window, "Dealer wins!");
                                         }else if(playerValue == dealerHand.handValue()) {
-                                            gameResult = "Draw!";
+                                            showEndMessage(window, "Draw!");
                                         }
                                         isGameOver = true;
                                     }
@@ -290,7 +290,7 @@ void createMenuWindow() {
                                 default:
                                     isPlayerTurn = false;
                                     isGameOver = true;
-                                    gameResult = "Player wins!";
+                                    showEndMessage(window, "Player wins!");
 
                             }
                         }
