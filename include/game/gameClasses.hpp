@@ -157,7 +157,7 @@ private:
     //konterner któy zawiera ręke gracza
 
     std::vector<std::unique_ptr<Card>> hand_;
-    inline static int ace_num =0;
+    int ace_num = 0;
     int value_;
 
 
