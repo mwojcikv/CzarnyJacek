@@ -17,11 +17,59 @@ enum MenuState {
     BOTS_MENU,
     MULTIPLAYER_MENU,
     SHOP_MENU,
-    EXCLUSIVE_CONTENT_MENU,
     RULES_MENU,
     BLACKJACK_GAME
 };
 
+void showEndMessage(sf::RenderWindow &window, std::string komunikat)
+{
+    // Utworzenie czcionki
+    sf::Font font;
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf"))
+    {
+        // Obsługa błędu ładowania czcionki
+        return;
+    }
+
+    // Utworzenie napisu
+    sf::Text text(komunikat, font, 20);
+    text.setFillColor(sf::Color::Black); // Ustawienie koloru tekstu
+
+    // Utworzenie prostokąta
+    sf::RectangleShape rectangle(sf::Vector2f(400, 200));
+    rectangle.setFillColor(sf::Color::White); // Kolor prostokąta
+    rectangle.setOutlineColor(sf::Color::Black); // Kolor obramowania
+    rectangle.setOutlineThickness(2); // Grubość obramowania
+
+    // Pozycjonowanie prostokąta na środku okna
+    sf::Vector2u windowSize = window.getSize();
+    rectangle.setPosition(float(windowSize.x / 2) - rectangle.getSize().x / 2, float(windowSize.y / 2) - rectangle.getSize().y / 2);
+
+    // Pozycjonowanie napisu na środku prostokąta
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+    text.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2.0f, rectangle.getPosition().y + rectangle.getSize().y / 2.0f);
+
+    while (true)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                return;
+            }
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                return; // Wyjście z funkcji po kliknięciu myszy
+            }
+        }
+        window.draw(rectangle); // Rysowanie prostokąta
+        window.draw(text); // Rysowanie napisu
+        window.display();
+    }
+}
 
 // Function to draw a button
 void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& text) {
@@ -62,7 +110,7 @@ sf::Sprite createCardSprite(const std::string& imagePath) {
 
 // Function to get the path to a card image
 std::string getCardImagePath(const Card* card) {
-    return "C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards/" + cardToString(card);
+    return "C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards/" + cardToString(card);
 }
 
 // Function to draw a hand of cards
@@ -91,7 +139,7 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
 }
 
 sf::Sprite drawReverse(sf::RenderWindow& window,float xPosition, float yPosition) {
-    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
+    sf::Sprite cardSprite = createCardSprite("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
     cardSprite.setPosition(xPosition, yPosition);
     window.draw(cardSprite);
 
@@ -105,7 +153,7 @@ void createMenuWindow() {
     sf::Color backgroundColor = sf::Color::Green;
 
     sf::Font font;
-    if (!font.loadFromFile("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/arial.ttf")) {
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf")) {
         std::cerr << "Failed to load font \"arial.ttf\"" << std::endl;
         return;
     }
@@ -116,9 +164,9 @@ void createMenuWindow() {
 
     sf::RectangleShape buttons[6];
     sf::Text buttonTexts[6];
-    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Exclusive content", "Game rules", "Exit game"};
+    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Game rules", "Exit game"};
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 5; ++i) {
         buttons[i].setSize(sf::Vector2f(300, 50));
         buttons[i].setFillColor(sf::Color::White);
         buttons[i].setPosition(250, float(100 + i * 70));
@@ -151,12 +199,13 @@ void createMenuWindow() {
                 sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
                 if (currentState == MAIN_MENU) {
-                    for (int i = 0; i < 6; ++i) {
+                    for (int i = 0; i < 5; ++i) {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
                                     std::cout << "Gameplay" << std::endl;
                                     currentState = BLACKJACK_GAME;
+                                    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
                                     deck.shuffleDeck();
                                     dealerHand.dealInitialHand(&playerHand, &deck);
                                     isPlayerTurn = true;
@@ -173,14 +222,10 @@ void createMenuWindow() {
                                     currentState = SHOP_MENU;
                                     break;
                                 case 3:
-                                    std::cout << "Exclusive content selected" << std::endl;
-                                    currentState = EXCLUSIVE_CONTENT_MENU;
-                                    break;
-                                case 4:
                                     std::cout << "Game rules selected" << std::endl;
                                     currentState = RULES_MENU;
                                     break;
-                                case 5:
+                                case 4:
                                     window.close();
                                     break;
                             }
@@ -200,7 +245,7 @@ void createMenuWindow() {
                                         deck.getTopCard(&playerHand);
                                         if (playerHand.handValue() > 21) {
                                             isGameOver = true;
-                                            gameResult = "Player busts! Dealer wins.";
+                                            showEndMessage(window, "Player busts, Dealer wins!");
                                         }
                                     }
                                     break;
@@ -257,7 +302,7 @@ void createMenuWindow() {
 
         if (currentState == MAIN_MENU) {
             window.draw(title);
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 5; ++i) {
                 drawButton(window, buttons[i], buttonTexts[i]);
             }
 
@@ -295,5 +340,6 @@ void createMenuWindow() {
 
 int main() {
     createMenuWindow();
+
     return 0;
 }
