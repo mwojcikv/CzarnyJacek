@@ -17,7 +17,6 @@ enum MenuState {
     BOTS_MENU,
     MULTIPLAYER_MENU,
     SHOP_MENU,
-    EXCLUSIVE_CONTENT_MENU,
     RULES_MENU,
     BLACKJACK_GAME
 };
@@ -76,6 +75,21 @@ void showEndMessage(sf::RenderWindow &window, std::string komunikat)
 void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& text) {
     window.draw(button);
     window.draw(text);
+}
+
+void drawHitStandBack(sf::RectangleShape gameButtons[3], sf::Text gameButtonTexts[3], const sf::Font& font  ){
+    std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
+    for(int i = 0; i < 3; ++i) {
+        gameButtons[i].setSize(sf::Vector2f(150, 50));
+        gameButtons[i].setFillColor(sf::Color::White);
+        gameButtons[i].setPosition(575, float(300 + 80 * i));
+
+        gameButtonTexts[i].setFont(font);
+        gameButtonTexts[i].setString(gameButtonLabels[i]);
+        gameButtonTexts[i].setCharacterSize(20);
+        gameButtonTexts[i].setFillColor(sf::Color::Black);
+        gameButtonTexts[i].setPosition(575 + 20, float(310 + 80 * i));
+    }
 }
 
 
@@ -156,9 +170,9 @@ void createMenuWindow() {
 
     sf::RectangleShape buttons[6];
     sf::Text buttonTexts[6];
-    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Exclusive content", "Game rules", "Exit game"};
+    std::string buttonLabels[] = {"Singleplayer game", "Multiplayer game", "In-game store", "Game rules", "Exit game"};
 
-    for (int i = 0; i < 6; ++i) {
+    for (int i = 0; i < 5; ++i) {
         buttons[i].setSize(sf::Vector2f(300, 50));
         buttons[i].setFillColor(sf::Color::White);
         buttons[i].setPosition(250, float(100 + i * 70));
@@ -191,7 +205,7 @@ void createMenuWindow() {
                 sf::Vector2f mousePosF(static_cast<float>(mousePos.x), static_cast<float>(mousePos.y));
 
                 if (currentState == MAIN_MENU) {
-                    for (int i = 0; i < 6; ++i) {
+                    for (int i = 0; i < 5; ++i) {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
@@ -203,6 +217,7 @@ void createMenuWindow() {
                                     isPlayerTurn = true;
                                     isGameOver = false;
                                     gameResult = "";
+
                                     break;
                                 case 1:
                                     std::cout << "Multiplayer game selected" << std::endl;
@@ -213,14 +228,10 @@ void createMenuWindow() {
                                     currentState = SHOP_MENU;
                                     break;
                                 case 3:
-                                    std::cout << "Exclusive content selected" << std::endl;
-                                    currentState = EXCLUSIVE_CONTENT_MENU;
-                                    break;
-                                case 4:
                                     std::cout << "Game rules selected" << std::endl;
                                     currentState = RULES_MENU;
                                     break;
-                                case 5:
+                                case 4:
                                     window.close();
                                     break;
                             }
@@ -229,18 +240,8 @@ void createMenuWindow() {
                 } else if (currentState == BLACKJACK_GAME) {
                     sf::RectangleShape gameButtons[3];
                     sf::Text gameButtonTexts[3];
-                    std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
-                    for (int i = 0; i < 3; ++i) {
-                        gameButtons[i].setSize(sf::Vector2f(150, 50));
-                        gameButtons[i].setFillColor(sf::Color::White);
-                        gameButtons[i].setPosition(float(50 + i * 170), 500);
 
-                        gameButtonTexts[i].setFont(font);
-                        gameButtonTexts[i].setString(gameButtonLabels[i]);
-                        gameButtonTexts[i].setCharacterSize(20);
-                        gameButtonTexts[i].setFillColor(sf::Color::Black);
-                        gameButtonTexts[i].setPosition(float(70 + i * 170), 510);
-                    }
+                    drawHitStandBack(gameButtons, gameButtonTexts, font);
 
                     for (int i = 0; i < 3; ++i) {
                         if (gameButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -258,18 +259,27 @@ void createMenuWindow() {
                                     if (isPlayerTurn && !isGameOver) {
                                         isPlayerTurn = false;
                                         dealerReverse.setColor(sf::Color(255, 255, 255, 0));
-                                        while (dealerHand.handValue() < 17 ){
+                                        int playerValue = playerHand.handValue();
+
+                                        if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
+                                            gameResult = "Black Jack!";
+                                            isGameOver = true;
+                                            break;
+                                        }
+                                        std::cout << dealerHand.handValue()<< "\n";
+                                        while (dealerHand.handValue() < 17 ) {
                                             deck.getTopCard(&dealerHand);
                                         }
-                                        int playerValue = playerHand.handValue();
-                                        int dealerValue = dealerHand.handValue();
-                                        if (dealerValue > 21 ) {
-                                            showEndMessage(window, "Player wins!");
-                                        } else if (playerValue < dealerValue) {
-                                            showEndMessage(window, "Dealer wins!");
+                                        std::cout << dealerHand.handValue()<< "\n";
 
-                                        isGameOver = true;
+                                        if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
+                                            gameResult = "Player wins!";
+                                        } else if (playerValue < dealerHand.handValue()) {
+                                            gameResult = "Dealer wins!";
+                                        }else if(playerValue == dealerHand.handValue()) {
+                                            gameResult = "Draw!";
                                         }
+                                        isGameOver = true;
                                     }
                                     break;
                                 case 2:  // Back to menu
@@ -277,6 +287,11 @@ void createMenuWindow() {
                                     dealerHand.clear_hand();
                                     currentState = MAIN_MENU;
                                     break;
+                                default:
+                                    isPlayerTurn = false;
+                                    isGameOver = true;
+                                    gameResult = "Player wins!";
+
                             }
                         }
                     }
@@ -293,7 +308,7 @@ void createMenuWindow() {
 
         if (currentState == MAIN_MENU) {
             window.draw(title);
-            for (int i = 0; i < 6; ++i) {
+            for (int i = 0; i < 5; ++i) {
                 drawButton(window, buttons[i], buttonTexts[i]);
             }
 
@@ -310,19 +325,8 @@ void createMenuWindow() {
             // Draw the game buttons
             sf::RectangleShape gameButtons[3];
             sf::Text gameButtonTexts[3];
-            std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
 
-            for (int i = 0; i < 3; ++i) {
-                gameButtons[i].setSize(sf::Vector2f(150, 50));
-                gameButtons[i].setFillColor(sf::Color::White);
-                gameButtons[i].setPosition(float(50 + i * 170), 500);
-
-                gameButtonTexts[i].setFont(font);
-                gameButtonTexts[i].setString(gameButtonLabels[i]);
-                gameButtonTexts[i].setCharacterSize(20);
-                gameButtonTexts[i].setFillColor(sf::Color::Black);
-                gameButtonTexts[i].setPosition(float(70 + i * 170), 510);
-            }
+            drawHitStandBack(gameButtons, gameButtonTexts, font);
 
             for (int i = 0; i < 3; ++i) {
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
