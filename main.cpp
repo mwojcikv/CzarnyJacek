@@ -21,6 +21,55 @@ enum MenuState {
     BLACKJACK_GAME
 };
 
+void showEndMessage(sf::RenderWindow &window, std::string komunikat)
+{
+    // Utworzenie czcionki
+    sf::Font font;
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf"))
+    {
+        // Obsługa błędu ładowania czcionki
+        return;
+    }
+
+    // Utworzenie napisu
+    sf::Text text(komunikat, font, 20);
+    text.setFillColor(sf::Color::Black); // Ustawienie koloru tekstu
+
+    // Utworzenie prostokąta
+    sf::RectangleShape rectangle(sf::Vector2f(400, 200));
+    rectangle.setFillColor(sf::Color::White); // Kolor prostokąta
+    rectangle.setOutlineColor(sf::Color::Black); // Kolor obramowania
+    rectangle.setOutlineThickness(2); // Grubość obramowania
+
+    // Pozycjonowanie prostokąta na środku okna
+    sf::Vector2u windowSize = window.getSize();
+    rectangle.setPosition(float(windowSize.x / 2) - rectangle.getSize().x / 2, float(windowSize.y / 2) - rectangle.getSize().y / 2);
+
+    // Pozycjonowanie napisu na środku prostokąta
+    sf::FloatRect textRect = text.getLocalBounds();
+    text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
+    text.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2.0f, rectangle.getPosition().y + rectangle.getSize().y / 2.0f);
+
+    while (true)
+    {
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            if (event.type == sf::Event::Closed)
+            {
+                window.close();
+                return;
+            }
+            if (event.type == sf::Event::MouseButtonPressed)
+            {
+                return; // Wyjście z funkcji po kliknięciu myszy
+            }
+        }
+        window.draw(rectangle); // Rysowanie prostokąta
+        window.draw(text); // Rysowanie napisu
+        window.display();
+    }
+}
 
 // Function to draw a button
 void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& text) {
@@ -46,7 +95,7 @@ sf::Sprite createCardSprite(const std::string& imagePath) {
 
 // Function to get the path to a card image
 std::string getCardImagePath(const Card* card) {
-    return "C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards/" + cardToString(card);
+    return "C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards/" + cardToString(card);
 }
 
 // Function to draw a hand of cards
@@ -75,7 +124,7 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
 }
 
 sf::Sprite drawReverse(sf::RenderWindow& window,float xPosition, float yPosition) {
-    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
+    sf::Sprite cardSprite = createCardSprite("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards reverse/basic/card_reverse_red.png");
     cardSprite.setPosition(xPosition, yPosition);
     window.draw(cardSprite);
 
@@ -89,7 +138,7 @@ void createMenuWindow() {
     sf::Color backgroundColor = sf::Color::Green;
 
     sf::Font font;
-    if (!font.loadFromFile("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/arial.ttf")) {
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf")) {
         std::cerr << "Failed to load font \"arial.ttf\"" << std::endl;
         return;
     }
@@ -141,6 +190,7 @@ void createMenuWindow() {
                                 case 0:
                                     std::cout << "Gameplay" << std::endl;
                                     currentState = BLACKJACK_GAME;
+                                    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
                                     deck.shuffleDeck();
                                     dealerHand.dealInitialHand(&playerHand, &deck);
                                     isPlayerTurn = true;
@@ -189,7 +239,7 @@ void createMenuWindow() {
                                         deck.getTopCard(&playerHand);
                                         if (playerHand.handValue() > 21) {
                                             isGameOver = true;
-                                            gameResult = "Player busts! Dealer wins.";
+                                            showEndMessage(window, "Player busts, Dealer wins!");
                                         }
                                     }
                                     break;
@@ -203,15 +253,17 @@ void createMenuWindow() {
                                         int playerValue = playerHand.handValue();
                                         int dealerValue = dealerHand.handValue();
                                         if (dealerValue > 21 ) {
-                                            gameResult = "Player wins!";
+                                            showEndMessage(window, "Player wins!");
                                         } else if (playerValue < dealerValue) {
-                                            gameResult = "Dealer wins!";
+                                            showEndMessage(window, "Dealer wins!");
 
                                         isGameOver = true;
                                         }
                                     }
                                     break;
                                 case 2:  // Back to menu
+                                    playerHand.clear_hand();
+                                    dealerHand.clear_hand();
                                     currentState = MAIN_MENU;
                                     break;
                             }
@@ -279,5 +331,6 @@ void createMenuWindow() {
 
 int main() {
     createMenuWindow();
+
     return 0;
 }
