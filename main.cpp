@@ -11,7 +11,6 @@
 #include <algorithm>
 #include <random>
 
-
 enum MenuState {
     MAIN_MENU,
     BOTS_MENU,
@@ -21,12 +20,12 @@ enum MenuState {
     BLACKJACK_GAME
 };
 
+int tokens = 0;  // Add a global variable to keep track of the number of tokens
 
 void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& text) {
     window.draw(button);
     window.draw(text);
 }
-
 
 sf::Sprite createCardSprite(const std::string& imagePath) {
     sf::Texture* cardTexture = new sf::Texture();
@@ -40,7 +39,6 @@ sf::Sprite createCardSprite(const std::string& imagePath) {
     cardSprite.setScale(0.3f, 0.3f);
     return cardSprite;
 }
-
 
 std::string getCardImagePath(const Card* card) {
     return "C:\\Users\\maksi\\Downloads\\CzarnyJacek-maksw-dev\\CzarnyJacek-maksw-dev/cards/" + cardToString(card);
@@ -56,7 +54,6 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
         xPosition += 40;
     }
 
-
     if (hand.isDealer() == 0) {
         sf::Text handValueText;
         handValueText.setFont(font);
@@ -64,7 +61,6 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
         handValueText.setCharacterSize(20);
         handValueText.setFillColor(sf::Color::Black);
         handValueText.setPosition(50, 350);
-
 
         window.draw(handValueText);
     }
@@ -77,7 +73,6 @@ sf::Sprite drawReverse(sf::RenderWindow& window, float xPosition, float yPositio
 
     return cardSprite;
 }
-
 
 void createMenuWindow() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Menu");
@@ -110,8 +105,13 @@ void createMenuWindow() {
         buttonTexts[i].setPosition(270, float(110 + i * 70));
     }
 
-    MenuState currentState = MAIN_MENU;
+    sf::Text tokensText;
+    tokensText.setFont(font);
+    tokensText.setCharacterSize(20);
+    tokensText.setFillColor(sf::Color::Black);
+    tokensText.setPosition(50, 500);
 
+    MenuState currentState = MAIN_MENU;
 
     DeckOfCards deck;
     Gamer playerHand;
@@ -135,13 +135,18 @@ void createMenuWindow() {
                         if (buttons[i].getGlobalBounds().contains(mousePosF)) {
                             switch (i) {
                                 case 0:
-                                    std::cout << "Gameplay" << std::endl;
-                                    currentState = BLACKJACK_GAME;
-                                    deck.shuffleDeck();
-                                    dealerHand.dealInitialHand(&playerHand, &deck);
-                                    isPlayerTurn = true;
-                                    isGameOver = false;
-                                    gameResult = "";
+                                    if (tokens > 0) {
+                                        std::cout << "Gameplay" << std::endl;
+                                        tokens--;  // Deduct a token for starting the game
+                                        currentState = BLACKJACK_GAME;
+                                        deck.shuffleDeck();
+                                        dealerHand.dealInitialHand(&playerHand, &deck);
+                                        isPlayerTurn = true;
+                                        isGameOver = false;
+                                        gameResult = "";
+                                    } else {
+                                        std::cout << "Not enough tokens! Please buy tokens in the store." << std::endl;
+                                    }
                                     break;
                                 case 1:
                                     std::cout << "Multiplayer game selected" << std::endl;
@@ -161,23 +166,40 @@ void createMenuWindow() {
                             }
                         }
                     }
-                } else if (currentState == MULTIPLAYER_MENU) {
+                } else if (currentState == SHOP_MENU) {
+                    sf::RectangleShape buyButton;
+                    buyButton.setSize(sf::Vector2f(300, 50));
+                    buyButton.setFillColor(sf::Color::White);
+                    buyButton.setPosition(250, 200);
+
+                    sf::Text buyButtonText;
+                    buyButtonText.setFont(font);
+                    buyButtonText.setString("Buy 1 Token");
+                    buyButtonText.setCharacterSize(20);
+                    buyButtonText.setFillColor(sf::Color::Black);
+                    buyButtonText.setPosition(270, 210);
+
                     sf::RectangleShape backButton;
                     backButton.setSize(sf::Vector2f(300, 50));
                     backButton.setFillColor(sf::Color::White);
-                    backButton.setPosition(250, 400);
+                    backButton.setPosition(250, 300);
 
                     sf::Text backButtonText;
                     backButtonText.setFont(font);
                     backButtonText.setString("Back to Menu");
                     backButtonText.setCharacterSize(20);
                     backButtonText.setFillColor(sf::Color::Black);
-                    backButtonText.setPosition(270, 410);
+                    backButtonText.setPosition(270, 310);
 
-                    if (backButton.getGlobalBounds().contains(mousePosF)) {
+                    if (buyButton.getGlobalBounds().contains(mousePosF)) {
+                        tokens++;  // Add a token
+                        std::cout << "Bought 1 token. You now have " << tokens << " tokens." << std::endl;
+                    } else if (backButton.getGlobalBounds().contains(mousePosF)) {
                         currentState = MAIN_MENU;
                     }
 
+                    window.draw(buyButton);
+                    window.draw(buyButtonText);
                     window.draw(backButton);
                     window.draw(backButtonText);
                 } else if (currentState == BLACKJACK_GAME) {
@@ -233,7 +255,6 @@ void createMenuWindow() {
                         }
                     }
 
-
                     for (int i = 0; i < 3; ++i) {
                         drawButton(window, gameButtons[i], gameButtonTexts[i]);
                     }
@@ -248,6 +269,8 @@ void createMenuWindow() {
             for (int i = 0; i < 5; ++i) {
                 drawButton(window, buttons[i], buttonTexts[i]);
             }
+            tokensText.setString("Tokens: " + std::to_string(tokens));
+            window.draw(tokensText);
         } else if (currentState == MULTIPLAYER_MENU) {
             sf::Text multiplayerMessage("Multiplayer game is under development. Stay tuned!", font, 24);
             multiplayerMessage.setFillColor(sf::Color::Black);
@@ -266,6 +289,40 @@ void createMenuWindow() {
             backButtonText.setPosition(270, 410);
 
             window.draw(multiplayerMessage);
+            window.draw(backButton);
+            window.draw(backButtonText);
+        } else if (currentState == SHOP_MENU) {
+            sf::Text shopTitle("In-game Store", font, 24);
+            shopTitle.setFillColor(sf::Color::Black);
+            shopTitle.setPosition(250, 20);
+            window.draw(shopTitle);
+
+            sf::RectangleShape buyButton;
+            buyButton.setSize(sf::Vector2f(300, 50));
+            buyButton.setFillColor(sf::Color::White);
+            buyButton.setPosition(250, 200);
+
+            sf::Text buyButtonText;
+            buyButtonText.setFont(font);
+            buyButtonText.setString("Buy 1 Token");
+            buyButtonText.setCharacterSize(20);
+            buyButtonText.setFillColor(sf::Color::Black);
+            buyButtonText.setPosition(270, 210);
+
+            sf::RectangleShape backButton;
+            backButton.setSize(sf::Vector2f(300, 50));
+            backButton.setFillColor(sf::Color::White);
+            backButton.setPosition(250, 300);
+
+            sf::Text backButtonText;
+            backButtonText.setFont(font);
+            backButtonText.setString("Back to Menu");
+            backButtonText.setCharacterSize(20);
+            backButtonText.setFillColor(sf::Color::Black);
+            backButtonText.setPosition(270, 310);
+
+            window.draw(buyButton);
+            window.draw(buyButtonText);
             window.draw(backButton);
             window.draw(backButtonText);
         } else if (currentState == BLACKJACK_GAME) {
