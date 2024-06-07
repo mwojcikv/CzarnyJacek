@@ -149,14 +149,16 @@ sf::Sprite drawReverse(sf::RenderWindow& window,float xPosition, float yPosition
 // Function to create the menu window
 void createMenuWindow() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Menu");
+    sf::Color backgroundColor = sf::Color::Green;
 
-    sf::Texture menuBackgroundTexture;
-    if (!menuBackgroundTexture.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/graphic_concept/gotowe menu/menu_glowne_final.png")) {
-        std::cerr << "Failed to load menu background image" << std::endl;
-        return;
-    }
-    sf::Sprite menuBackgroundSprite;
-    menuBackgroundSprite.setTexture(menuBackgroundTexture);
+
+//    sf::Texture menuBackgroundTexture;
+//    if (!menuBackgroundTexture.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/graphic_concept/gotowe menu/menu_glowne_final.png")) {
+//        std::cerr << "Failed to load menu background image" << std::endl;
+//        return;
+//    }
+//    sf::Sprite menuBackgroundSprite;
+//    menuBackgroundSprite.setTexture(menuBackgroundTexture);
 
     sf::Font font;
     if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf")) {
@@ -251,7 +253,7 @@ void createMenuWindow() {
                                         deck.getTopCard(&playerHand);
                                         if (playerHand.handValue() > 21) {
                                             isGameOver = true;
-                                            showEndMessage(window, "Player busts, Dealer wins!");
+                                            gameResult = "Player busts, Dealer wins!";
                                         }
                                     }
                                     break;
@@ -262,7 +264,7 @@ void createMenuWindow() {
                                         int playerValue = playerHand.handValue();
 
                                         if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
-                                            showEndMessage(window, "Black Jack!");
+                                            gameResult = "Black Jack!";
                                             isGameOver = true;
                                             break;
                                         }
@@ -273,11 +275,11 @@ void createMenuWindow() {
                                         std::cout << dealerHand.handValue()<< "\n";
 
                                         if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
-                                            showEndMessage(window, "Player wins!");
+                                            gameResult = "Player wins!";
                                         } else if (playerValue < dealerHand.handValue()) {
-                                            showEndMessage(window, "Dealer wins!");
+                                            gameResult = "Dealer wins!";
                                         }else if(playerValue == dealerHand.handValue()) {
-                                            showEndMessage(window, "Draw!");
+                                            gameResult = "Draw!";
                                         }
                                         isGameOver = true;
                                     }
@@ -290,7 +292,7 @@ void createMenuWindow() {
                                 default:
                                     isPlayerTurn = false;
                                     isGameOver = true;
-                                    showEndMessage(window, "Player wins!");
+                                    gameResult = "Player wins!";
 
                             }
                         }
@@ -304,7 +306,7 @@ void createMenuWindow() {
             }
         }
 
-        window.clear();
+        window.clear(backgroundColor);
 
         if (currentState == MAIN_MENU) {
             window.draw(title);
@@ -333,10 +335,7 @@ void createMenuWindow() {
             }
 
             if (isGameOver) {
-                sf::Text resultText(gameResult, font, 24);
-                resultText.setFillColor(sf::Color::Red);
-                resultText.setPosition(250, 400);
-                window.draw(resultText);
+                showEndMessage(window, gameResult);
             }
         }
 
