@@ -23,6 +23,7 @@ enum MenuState {
 
 void showEndMessage(sf::RenderWindow &window, std::string komunikat)
 {
+
     // Utworzenie czcionki
     sf::Font font;
     if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf"))
@@ -50,18 +51,13 @@ void showEndMessage(sf::RenderWindow &window, std::string komunikat)
     text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     text.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2.0f, rectangle.getPosition().y + rectangle.getSize().y / 2.0f);
 
-    while (true)
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
+    while (true) {
+        sf::Event click;
+        while (window.pollEvent(click)) {
+            if (click.type == sf::Event::Closed) {
                 window.close();
                 return;
-            }
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
+            } else if (click.type == sf::Event::MouseButtonPressed) {
                 return; // Wyjście z funkcji po kliknięciu myszy
             }
         }
@@ -252,8 +248,10 @@ void createMenuWindow() {
                                     if (isPlayerTurn && !isGameOver) {
                                         deck.getTopCard(&playerHand);
                                         if (playerHand.handValue() > 21) {
+                                            dealerReverse.setColor(sf::Color(255, 255, 255, 0));
                                             isGameOver = true;
                                             gameResult = "Player busts, Dealer wins!";
+                                            showEndMessage(window, gameResult);
                                         }
                                     }
                                     break;
@@ -265,6 +263,7 @@ void createMenuWindow() {
 
                                         if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
                                             gameResult = "Black Jack!";
+                                            showEndMessage(window, gameResult);
                                             isGameOver = true;
                                             break;
                                         }
@@ -276,10 +275,13 @@ void createMenuWindow() {
 
                                         if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
                                             gameResult = "Player wins!";
+                                            showEndMessage(window, gameResult);
                                         } else if (playerValue < dealerHand.handValue()) {
                                             gameResult = "Dealer wins!";
+                                            showEndMessage(window, gameResult);
                                         }else if(playerValue == dealerHand.handValue()) {
                                             gameResult = "Draw!";
+                                            showEndMessage(window, gameResult);
                                         }
                                         isGameOver = true;
                                     }
@@ -334,9 +336,8 @@ void createMenuWindow() {
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
             }
 
-            if (isGameOver) {
-                showEndMessage(window, gameResult);
-            }
+//            if (isGameOver) {
+//            }
         }
 
         window.display();
