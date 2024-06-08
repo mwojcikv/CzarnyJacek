@@ -150,13 +150,15 @@ sf::Sprite drawReverse(sf::RenderWindow& window,float xPosition, float yPosition
 void createMenuWindow() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Menu");
 
-    sf::Texture menuBackgroundTexture;
-    if (!menuBackgroundTexture.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/graphic_concept/gotowe menu/menu_glowne_final.png")) {
-        std::cerr << "Failed to load menu background image" << std::endl;
-        return;
-    }
-    sf::Sprite menuBackgroundSprite;
-    menuBackgroundSprite.setTexture(menuBackgroundTexture);
+    sf::Color backgroundColor(0,225, 0); 
+
+//    sf::Texture menuBackgroundTexture;
+//    if (!menuBackgroundTexture.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/graphic_concept/gotowe menu/menu_glowne_final.png")) {
+//        std::cerr << "Failed to load menu background image" << std::endl;
+//        return;
+//    }
+//    sf::Sprite menuBackgroundSprite;
+//    menuBackgroundSprite.setTexture(menuBackgroundTexture);
 
     sf::Font font;
     if (!font.loadFromFile("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/arial.ttf")) {
@@ -303,8 +305,7 @@ void createMenuWindow() {
                 }
             }
         }
-
-        window.clear();
+        window.clear(backgroundColor);
 
         if (currentState == MAIN_MENU) {
             window.draw(title);
