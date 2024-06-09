@@ -71,7 +71,7 @@ void showEndMessage(sf::RenderWindow &window, std::string komunikat)
 
     // Utworzenie czcionki
     sf::Font font;
-    if (!font.loadFromFile("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/arial.ttf"))
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf"))
     {
         // Obsługa błędu ładowania czcionki
         return;
@@ -162,7 +162,7 @@ sf::Sprite createCardSprite(const std::string& imagePath) {
 }
 
 std::string getCardImagePath(const Card* card) {
-    return "C:\\Users\\maksi\\Downloads\\CzarnyJacek-maksw-dev\\CzarnyJacek-maksw-dev/cards/" + cardToString(card);
+    return "C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards/" + cardToString(card);
 }
 
 void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const sf::Font& font) {
@@ -188,7 +188,7 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
 }
 
 sf::Sprite drawReverse(sf::RenderWindow& window, float xPosition, float yPosition, std::string reverseURL ) {
-    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/" + reverseURL);
+    sf::Sprite cardSprite = createCardSprite("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards reverse/" + reverseURL);
     cardSprite.setPosition(xPosition, yPosition);
     window.draw(cardSprite);
 
@@ -196,7 +196,7 @@ sf::Sprite drawReverse(sf::RenderWindow& window, float xPosition, float yPositio
 }
 
 sf::Sprite setReverse(sf::Sprite&  dealerReverse , std::string reverseURL){
-    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/" + reverseURL);
+    sf::Sprite cardSprite = createCardSprite("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/cards reverse/" + reverseURL);
     cardSprite.setPosition(290, 100);
 
     dealerReverse = cardSprite;
@@ -208,7 +208,7 @@ sf::Sprite setReverse(sf::Sprite&  dealerReverse , std::string reverseURL){
 
 void createMenuWindow() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Menu");
-    sf::Color backgroundColor = sf::Color::Green;
+    //sf::Color backgroundColor = sf::Color::Green;
 
 
     sf::Color backgroundColor(0, 225, 0);
@@ -223,7 +223,7 @@ void createMenuWindow() {
 //    menuBackgroundSprite.setTexture(menuBackgroundTexture);
 
     sf::Font font;
-    if (!font.loadFromFile("C:\\Users\\maksi\\Downloads\\CzarnyJacek-maksw-dev\\CzarnyJacek-maksw-dev/arial.ttf")) {
+    if (!font.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/arial.ttf")) {
         std::cerr << "Failed to load font \"arial.ttf\"" << std::endl;
         return;
     }
@@ -284,6 +284,7 @@ void createMenuWindow() {
                                         std::cout << "Gameplay" << std::endl;
                                         tokens--;  // Deduct a token for starting the game
                                         currentState = BLACKJACK_GAME;
+                                        dealerReverse.setColor(sf::Color(255, 255, 255, 255));
                                         deck.shuffleDeck();
                                         dealerHand.dealInitialHand(&playerHand, &deck);
                                         isPlayerTurn = true;
@@ -355,7 +356,6 @@ void createMenuWindow() {
                         }
                     else if(cardButtons[1].getGlobalBounds().contains(mousePosF)){
                         setReverse(dealerReverse,"basic/card_reverse_blue.png");
-                        dealerReverse.setColor(sf::Color(255, 255, 255, 255));
                     }else if(cardButtons[2].getGlobalBounds().contains(mousePosF)){
                         setReverse(dealerReverse,"extended/extended_reverse_9.png");
                     }else if(cardButtons[3].getGlobalBounds().contains(mousePosF)){
@@ -372,7 +372,7 @@ void createMenuWindow() {
                     sf::Text gameButtonTexts[4];
 
                     drawHitStandBack(gameButtons, gameButtonTexts, font);
-                    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
+
                     for (int i = 0; i < 4; ++i) {
                         if (gameButtons[i].getGlobalBounds().contains(mousePosF) &&
                             sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -413,6 +413,7 @@ void createMenuWindow() {
                                             showEndMessage(window, gameResult);
                                         } else if (playerValue < dealerHand.handValue()) {
                                             gameResult = "Dealer wins!";
+                                            showEndMessage(window, gameResult);
                                         }else if(playerValue == dealerHand.handValue()) {
                                             gameResult = "Draw!";
                                             showEndMessage(window, gameResult);
