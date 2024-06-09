@@ -10,6 +10,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <fstream>
 
 enum MenuState {
     MAIN_MENU,
@@ -21,10 +22,52 @@ enum MenuState {
 };
 
 
+//function to display game rules
+void displayGameRules(sf::RenderWindow& window, const sf::Font& font) {
+    std::ifstream rulesFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/Documents/Zasady_gry.txt");
+    if (!rulesFile.is_open()) {
+        std::cerr << "Nie udało się otworzyć pliku z zasadami" << std::endl;
+        return;
+    }
+
+    std::string rules((std::istreambuf_iterator<char>(rulesFile)), std::istreambuf_iterator<char>());
+    rulesFile.close();
+
+    sf::Text rulesText;
+    rulesText.setFont(font);
+    rulesText.setString(rules);
+    rulesText.setCharacterSize(16); // Zmniejszenie rozmiaru czcionki
+    rulesText.setFillColor(sf::Color::Black);
+    rulesText.setPosition(50, 50);
+
+    sf::View rulesView = window.getDefaultView();
+    rulesView.setSize(sf::Vector2f(800, 600));
+    window.setView(rulesView);
+
+    window.clear(sf::Color::White);
+    window.draw(rulesText);
+    window.display();
+
+    bool waiting = true;
+    while (waiting) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                waiting = false;
+            } else if (event.type == sf::Event::KeyPressed || event.type == sf::Event::MouseButtonPressed) {
+                waiting = false;
+            }
+        }
+    }
+}
+
 int tokens = 0;  // Add a global variable to keep track of the number of tokens
+
 
 void showEndMessage(sf::RenderWindow &window, std::string komunikat)
 {
+
     // Utworzenie czcionki
     sf::Font font;
     if (!font.loadFromFile("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/arial.ttf"))
@@ -52,18 +95,13 @@ void showEndMessage(sf::RenderWindow &window, std::string komunikat)
     text.setOrigin(textRect.left + textRect.width / 2.0f, textRect.top + textRect.height / 2.0f);
     text.setPosition(rectangle.getPosition().x + rectangle.getSize().x / 2.0f, rectangle.getPosition().y + rectangle.getSize().y / 2.0f);
 
-    while (true)
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-            {
+    while (true) {
+        sf::Event click;
+        while (window.pollEvent(click)) {
+            if (click.type == sf::Event::Closed) {
                 window.close();
                 return;
-            }
-            if (event.type == sf::Event::MouseButtonPressed)
-            {
+            } else if (click.type == sf::Event::MouseButtonPressed) {
                 return; // Wyjście z funkcji po kliknięciu myszy
             }
         }
@@ -144,8 +182,11 @@ sf::Sprite drawReverse(sf::RenderWindow& window, float xPosition, float yPositio
 
 void createMenuWindow() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Menu");
+    sf::Color backgroundColor = sf::Color::Green;
+
 
     sf::Color backgroundColor(0,225, 0); 
+
 
 //    sf::Texture menuBackgroundTexture;
 //    if (!menuBackgroundTexture.loadFromFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/graphic_concept/gotowe menu/menu_glowne_final.png")) {
@@ -234,6 +275,7 @@ void createMenuWindow() {
                                     break;
                                 case 3:
                                     std::cout << "Game rules selected" << std::endl;
+                                    displayGameRules(window, font);
                                     currentState = RULES_MENU;
                                     break;
                                 case 4:
@@ -291,8 +333,10 @@ void createMenuWindow() {
                                     if (isPlayerTurn && !isGameOver) {
                                         deck.getTopCard(&playerHand);
                                         if (playerHand.handValue() > 21) {
+                                            dealerReverse.setColor(sf::Color(255, 255, 255, 0));
                                             isGameOver = true;
-                                            showEndMessage(window, "Player busts, Dealer wins!");
+                                            gameResult = "Player busts, Dealer wins!";
+                                            showEndMessage(window, gameResult);
                                         }
                                     }
                                     break;
@@ -305,6 +349,7 @@ void createMenuWindow() {
 
                                         if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
                                             gameResult = "Black Jack!";
+                                            showEndMessage(window, gameResult);
                                             isGameOver = true;
                                             break;
                                         }
@@ -316,11 +361,17 @@ void createMenuWindow() {
 
                                         if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
                                             gameResult = "Player wins!";
+                                            showEndMessage(window, gameResult);
                                         } else if (playerValue < dealerHand.handValue()) {
                                             gameResult = "Dealer wins!";
+
+                                            showEndMessage(window, gameResult);
+
                                         }
+
                                         }else if(playerValue == dealerHand.handValue()) {
                                             gameResult = "Draw!";
+                                            showEndMessage(window, gameResult);
                                         }
 
                                         isGameOver = true;
@@ -346,6 +397,7 @@ void createMenuWindow() {
                 }
             }
         }
+
         window.clear(backgroundColor);
 
         if (currentState == MAIN_MENU) {
@@ -429,12 +481,8 @@ void createMenuWindow() {
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
             }
 
-            if (isGameOver) {
-                sf::Text resultText(gameResult, font, 24);
-                resultText.setFillColor(sf::Color::Red);
-                resultText.setPosition(250, 400);
-                window.draw(resultText);
-            }
+//            if (isGameOver) {
+//            }
         }
 
         window.display();
