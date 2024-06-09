@@ -22,6 +22,7 @@ enum MenuState {
 };
 
 
+
 //function to display game rules
 void displayGameRules(sf::RenderWindow& window, const sf::Font& font) {
     std::ifstream rulesFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/Documents/Zasady_gry.txt");
@@ -116,9 +117,9 @@ void drawButton(sf::RenderWindow& window, sf::RectangleShape& button, sf::Text& 
     window.draw(text);
 }
 
-void drawHitStandBack(sf::RectangleShape gameButtons[3], sf::Text gameButtonTexts[3], const sf::Font& font  ){
-    std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu"};
-    for(int i = 0; i < 3; ++i) {
+void drawHitStandBack(sf::RectangleShape gameButtons[4], sf::Text gameButtonTexts[4], const sf::Font& font  ){
+    std::string gameButtonLabels[] = {"Hit", "Stand", "Back to Menu", "Next Round"};
+    for(int i = 0; i < 4; ++i) {
         gameButtons[i].setSize(sf::Vector2f(150, 50));
         gameButtons[i].setFillColor(sf::Color::White);
         gameButtons[i].setPosition(575, float(300 + 80 * i));
@@ -131,6 +132,20 @@ void drawHitStandBack(sf::RectangleShape gameButtons[3], sf::Text gameButtonText
     }
 }
 
+void drawSkins(sf::RectangleShape cardButtons[4], sf::Text cardText[4], const sf::Font& font, sf::RenderWindow& window  ){
+    for(int i = 0; i < 4; ++i) {
+        cardButtons[i].setSize(sf::Vector2f(150, 50));
+        cardButtons[i].setFillColor(sf::Color::White);
+        cardButtons[i].setPosition(575, float(300 + 80 * i));
+        cardText[i].setFont(font);
+        cardText[i].setString(std::string ("DECK") + " " + std::to_string(i+1) );
+        cardText[i].setCharacterSize(20);
+        cardText[i].setFillColor(sf::Color::Black);
+        cardText[i].setPosition(575+20, float(310 + 80 * i));
+        window.draw(cardButtons[i]);
+        window.draw(cardText[i]);
+    }
+}
 
 // Function to display a card image in the window
 sf::Sprite createCardSprite(const std::string& imagePath) {
@@ -172,20 +187,31 @@ void drawHand(sf::RenderWindow& window, const Hand& hand, float yPosition, const
     }
 }
 
-sf::Sprite drawReverse(sf::RenderWindow& window, float xPosition, float yPosition) {
-    sf::Sprite cardSprite = createCardSprite("C:\\Users\\maksi\\Downloads\\CzarnyJacek-maksw-dev\\CzarnyJacek-maksw-dev reverse/basic/card_reverse_red.png");
+sf::Sprite drawReverse(sf::RenderWindow& window, float xPosition, float yPosition, std::string reverseURL ) {
+    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/" + reverseURL);
     cardSprite.setPosition(xPosition, yPosition);
     window.draw(cardSprite);
 
     return cardSprite;
 }
 
+sf::Sprite setReverse(sf::Sprite&  dealerReverse , std::string reverseURL){
+    sf::Sprite cardSprite = createCardSprite("C:/workspace/studia/npg/projekt_npg/CzarnyJacek/cards reverse/" + reverseURL);
+    cardSprite.setPosition(290, 100);
+
+    dealerReverse = cardSprite;
+    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
+
+    return cardSprite;
+}
+
+
 void createMenuWindow() {
     sf::RenderWindow window(sf::VideoMode(800, 600), "SFML Menu");
     sf::Color backgroundColor = sf::Color::Green;
 
 
-    sf::Color backgroundColor(0,225, 0); 
+    sf::Color backgroundColor(0, 225, 0);
 
 
 //    sf::Texture menuBackgroundTexture;
@@ -233,10 +259,12 @@ void createMenuWindow() {
     DeckOfCards deck;
     Gamer playerHand;
     Dealer dealerHand;
+    std::string reverseURL = "basic/card_reverse_red.png";
     bool isPlayerTurn = true;
     bool isGameOver = false;
     std::string gameResult;
-    sf::Sprite dealerReverse = drawReverse(window, 290, 100);
+    sf::Sprite dealerReverse = drawReverse(window, 290, 100, reverseURL);
+
 
     while (window.isOpen()) {
         sf::Event event;
@@ -309,11 +337,30 @@ void createMenuWindow() {
                     backButtonText.setFillColor(sf::Color::Black);
                     backButtonText.setPosition(270, 310);
 
+                    //TODO
+
+                    sf::RectangleShape cardButtons[4];
+                    sf::Text cardText[4];
+
+                    drawSkins(cardButtons, cardText, font, window);
+
                     if (buyButton.getGlobalBounds().contains(mousePosF)) {
                         tokens++;  // Add a token
                         std::cout << "Bought 1 token. You now have " << tokens << " tokens." << std::endl;
                     } else if (backButton.getGlobalBounds().contains(mousePosF)) {
                         currentState = MAIN_MENU;
+                    } else if(cardButtons[0].getGlobalBounds().contains(mousePosF)){
+                        setReverse(dealerReverse,"basic/card_reverse_red.png");
+
+                        }
+                    else if(cardButtons[1].getGlobalBounds().contains(mousePosF)){
+                        setReverse(dealerReverse,"basic/card_reverse_blue.png");
+                        dealerReverse.setColor(sf::Color(255, 255, 255, 255));
+                    }else if(cardButtons[2].getGlobalBounds().contains(mousePosF)){
+                        setReverse(dealerReverse,"extended/extended_reverse_9.png");
+                    }else if(cardButtons[3].getGlobalBounds().contains(mousePosF)){
+                        setReverse(dealerReverse,"extended/extended_reverse_10.png");
+
                     }
 
                     window.draw(buyButton);
@@ -321,13 +368,14 @@ void createMenuWindow() {
                     window.draw(backButton);
                     window.draw(backButtonText);
                 } else if (currentState == BLACKJACK_GAME) {
-                    sf::RectangleShape gameButtons[3];
-                    sf::Text gameButtonTexts[3];
+                    sf::RectangleShape gameButtons[4];
+                    sf::Text gameButtonTexts[4];
 
                     drawHitStandBack(gameButtons, gameButtonTexts, font);
-
-                    for (int i = 0; i < 3; ++i) {
-                        if (gameButtons[i].getGlobalBounds().contains(mousePosF) && sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
+                    for (int i = 0; i < 4; ++i) {
+                        if (gameButtons[i].getGlobalBounds().contains(mousePosF) &&
+                            sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                             switch (i) {
                                 case 0:
                                     if (isPlayerTurn && !isGameOver) {
@@ -347,28 +395,24 @@ void createMenuWindow() {
 
                                         int playerValue = playerHand.handValue();
 
-                                        if(playerValue == 21 && dealerHand.handValue() != 21 && playerHand.numOfCards() == 2){
+                                        if (playerValue == 21 && dealerHand.handValue() != 21 &&
+                                            playerHand.numOfCards() == 2) {
                                             gameResult = "Black Jack!";
                                             showEndMessage(window, gameResult);
                                             isGameOver = true;
                                             break;
                                         }
-                                        std::cout << dealerHand.handValue()<< "\n";
-                                        while (dealerHand.handValue() < 17 ) {
+                                        std::cout << dealerHand.handValue() << "\n";
+                                        while (dealerHand.handValue() < 17) {
                                             deck.getTopCard(&dealerHand);
                                         }
-                                        std::cout << dealerHand.handValue()<< "\n";
+                                        std::cout << dealerHand.handValue() << "\n";
 
                                         if (dealerHand.handValue() > 21 || playerValue > dealerHand.handValue()) {
                                             gameResult = "Player wins!";
                                             showEndMessage(window, gameResult);
                                         } else if (playerValue < dealerHand.handValue()) {
                                             gameResult = "Dealer wins!";
-
-                                            showEndMessage(window, gameResult);
-
-                                        }
-
                                         }else if(playerValue == dealerHand.handValue()) {
                                             gameResult = "Draw!";
                                             showEndMessage(window, gameResult);
@@ -376,16 +420,33 @@ void createMenuWindow() {
 
                                         isGameOver = true;
                                     }
+
+                                    isGameOver = true;
+
                                     break;
                                 case 2:  // Back to menu
                                     playerHand.clear_hand();
                                     dealerHand.clear_hand();
                                     currentState = MAIN_MENU;
                                     break;
+                                case 3:
+                                    playerHand.clear_hand();
+                                    dealerHand.clear_hand();
+                                    deck.shuffleDeck();
+                                    dealerHand.dealInitialHand(&playerHand, &deck);
+                                    isPlayerTurn = true;
+                                    isGameOver = false;
+                                    dealerReverse.setColor(sf::Color(255, 255, 255, 255));
+
+                                    tokens--;
+                                    gameResult = "";
+                                    break;
                                 default:
                                     isPlayerTurn = false;
                                     isGameOver = true;
                                     gameResult = "Player wins!";
+
+                                    break;
 
                             }
                         }
@@ -461,6 +522,11 @@ void createMenuWindow() {
             window.draw(buyButtonText);
             window.draw(backButton);
             window.draw(backButtonText);
+
+            sf::RectangleShape cardButtons[4];
+            sf::Text cardText[4];
+            drawSkins(cardButtons, cardText, font, window);
+
         } else if (currentState == BLACKJACK_GAME) {
             sf::Text gameTitle("Blackjack", font, 24);
             gameTitle.setFillColor(sf::Color::Black);
@@ -472,12 +538,12 @@ void createMenuWindow() {
             window.draw(dealerReverse);
 
             // Draw the game buttons
-            sf::RectangleShape gameButtons[3];
-            sf::Text gameButtonTexts[3];
+            sf::RectangleShape gameButtons[4];
+            sf::Text gameButtonTexts[4];
 
             drawHitStandBack(gameButtons, gameButtonTexts, font);
 
-            for (int i = 0; i < 3; ++i) {
+            for (int i = 0; i < 4; ++i) {
                 drawButton(window, gameButtons[i], gameButtonTexts[i]);
             }
 
