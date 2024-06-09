@@ -10,6 +10,7 @@
 #include <vector>
 #include <algorithm>
 #include <random>
+#include <fstream>
 
 // Enumeration for menu and game states
 enum MenuState {
@@ -20,6 +21,46 @@ enum MenuState {
     RULES_MENU,
     BLACKJACK_GAME
 };
+
+//function to display game rules
+void displayGameRules(sf::RenderWindow& window, const sf::Font& font) {
+    std::ifstream rulesFile("C:/Users/PC/Desktop/Blackjack/CzarnyJacek/Documents/Zasady_gry.txt");
+    if (!rulesFile.is_open()) {
+        std::cerr << "Nie udało się otworzyć pliku z zasadami" << std::endl;
+        return;
+    }
+
+    std::string rules((std::istreambuf_iterator<char>(rulesFile)), std::istreambuf_iterator<char>());
+    rulesFile.close();
+
+    sf::Text rulesText;
+    rulesText.setFont(font);
+    rulesText.setString(rules);
+    rulesText.setCharacterSize(16); // Zmniejszenie rozmiaru czcionki
+    rulesText.setFillColor(sf::Color::Black);
+    rulesText.setPosition(50, 50);
+
+    sf::View rulesView = window.getDefaultView();
+    rulesView.setSize(sf::Vector2f(800, 600));
+    window.setView(rulesView);
+
+    window.clear(sf::Color::White);
+    window.draw(rulesText);
+    window.display();
+
+    bool waiting = true;
+    while (waiting) {
+        sf::Event event;
+        while (window.pollEvent(event)) {
+            if (event.type == sf::Event::Closed) {
+                window.close();
+                waiting = false;
+            } else if (event.type == sf::Event::KeyPressed || event.type == sf::Event::MouseButtonPressed) {
+                waiting = false;
+            }
+        }
+    }
+}
 
 void showEndMessage(sf::RenderWindow &window, std::string komunikat)
 {
@@ -227,6 +268,7 @@ void createMenuWindow() {
                                     break;
                                 case 3:
                                     std::cout << "Game rules selected" << std::endl;
+                                    displayGameRules(window, font);
                                     currentState = RULES_MENU;
                                     break;
                                 case 4:
